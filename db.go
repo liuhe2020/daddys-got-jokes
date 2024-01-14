@@ -11,7 +11,7 @@ import (
 )
 
 type Storage interface {
-	GetJokes() ([]*Joke, error)
+	GetJokes(page int) ([]*Joke, error)
 	GetJokeById(int) (*Joke, error)
 	// GetJokeRandom() (*Joke, error)
 }
@@ -70,8 +70,16 @@ func (s *PostgresStore) GetJokeById(id int) (*Joke, error) {
 	return nil, fmt.Errorf("joke %d not found", id)
 }
 
-func (s *PostgresStore) GetJokes() ([]*Joke, error) {
-	rows, err := s.db.Query("select * from joke")
+func (s *PostgresStore) GetJokes(page int) ([]*Joke, error) {
+	if page <= 0 {
+		page = 1
+	}
+
+	offset := (page - 1) * 20
+
+	rows, err := s.db.Query(
+		"SELECT * FROM joke LIMIT $1 OFFSET $2",
+		20, offset)
 	if err != nil {
 		return nil, err
 	}

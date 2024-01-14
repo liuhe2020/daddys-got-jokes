@@ -36,24 +36,22 @@ func (s *APIServer) Run() {
 
 func (s *APIServer) handleJoke(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
-		return s.handleGetJoke(w, r)
+		page, err := getPage(r)
+		if err != nil {
+			return err
+		}
+		jokes, err := s.store.GetJokes(page)
+		if err != nil {
+			return err
+		}
+		return WriteJSON(w, http.StatusOK, jokes)
 	}
-
 	return fmt.Errorf("method not allowed %s", r.Method)
-}
-
-func (s *APIServer) handleGetJoke(w http.ResponseWriter, r *http.Request) error {
-	jokes, err := s.store.GetJokes()
-	if err != nil {
-		return err
-	}
-
-	return WriteJSON(w, http.StatusOK, jokes)
 }
 
 func (s *APIServer) handleJokeById(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
-		id, err := getID(r)
+		id, err := getId(r)
 		if err != nil {
 			return err
 		}
@@ -94,11 +92,23 @@ func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
 	}
 }
 
-func getID(r *http.Request) (int, error) {
+func getId(r *http.Request) (int, error) {
 	idStr := mux.Vars(r)["id"]
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return id, fmt.Errorf("invalid id given %s", idStr)
 	}
 	return id, nil
+}
+
+func getPage(r *http.Request) (int, error) {
+	pageStr := r.URL.Query().Get("page")
+	if pageStr == "" {
+		return 1, nil // default page
+	}
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		return 0, fmt.Errorf("invalid page given %s", pageStr)
+	}
+	return page, nil
 }
