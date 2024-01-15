@@ -10,17 +10,17 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type Storage interface {
+type DB interface {
 	GetJokes(page int) ([]*Joke, error)
 	GetJokeById(int) (*Joke, error)
 	// GetJokeRandom() (*Joke, error)
 }
 
-type PostgresStore struct {
+type PostgresDB struct {
 	db *sql.DB
 }
 
-func NewPostgresStore() (*PostgresStore, error) {
+func NewPostgresDB() (*PostgresDB, error) {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Error loading environment variables file")
@@ -36,16 +36,16 @@ func NewPostgresStore() (*PostgresStore, error) {
 		return nil, err
 	}
 
-	return &PostgresStore{
+	return &PostgresDB{
 		db: db,
 	}, nil
 }
 
-func (s *PostgresStore) Init() error {
+func (s *PostgresDB) Init() error {
 	return s.createJokeTable()
 }
 
-func (s *PostgresStore) createJokeTable() error {
+func (s *PostgresDB) createJokeTable() error {
 	query := `create table if not exists joke (
 		id serial primary key,
 		type text,
@@ -57,7 +57,7 @@ func (s *PostgresStore) createJokeTable() error {
 	return err
 }
 
-func (s *PostgresStore) GetJokeById(id int) (*Joke, error) {
+func (s *PostgresDB) GetJokeById(id int) (*Joke, error) {
 	rows, err := s.db.Query("select * from joke where id = $1", id)
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (s *PostgresStore) GetJokeById(id int) (*Joke, error) {
 	return nil, fmt.Errorf("joke %d not found", id)
 }
 
-func (s *PostgresStore) GetJokes(page int) ([]*Joke, error) {
+func (s *PostgresDB) GetJokes(page int) ([]*Joke, error) {
 	if page <= 0 {
 		page = 1
 	}

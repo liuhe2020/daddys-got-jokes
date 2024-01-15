@@ -12,35 +12,36 @@ import (
 
 type APIServer struct {
 	listenAddr string
-	store      Storage
+	db         DB
 }
 
-func NewAPIServer(listenAddr string, store Storage) *APIServer {
+func NewAPIServer(listenAddr string, db DB) *APIServer {
 	return &APIServer{
 		listenAddr: listenAddr,
-		store:      store,
+		db:         db,
 	}
 }
 
 func (s *APIServer) Run() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/joke", makeHTTPHandleFunc(s.handleJoke))
-	router.HandleFunc("/joke/{id}", makeHTTPHandleFunc(s.handleJokeById))
-	// router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokeRandom))
+	router.HandleFunc("/jokes", makeHTTPHandleFunc(s.handleJokes))
+	router.HandleFunc("/joke/{id}", makeHTTPHandleFunc(s.handleJokesById))
+	// router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokesRandom))
 
 	log.Println("JSON API server running on port: ", s.listenAddr)
 
 	http.ListenAndServe(s.listenAddr, router)
 }
 
-func (s *APIServer) handleJoke(w http.ResponseWriter, r *http.Request) error {
+func (s *APIServer) handleJokes(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
+
 		page, err := getPage(r)
 		if err != nil {
 			return err
 		}
-		jokes, err := s.store.GetJokes(page)
+		jokes, err := s.db.GetJokes(page)
 		if err != nil {
 			return err
 		}
@@ -49,14 +50,14 @@ func (s *APIServer) handleJoke(w http.ResponseWriter, r *http.Request) error {
 	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
-func (s *APIServer) handleJokeById(w http.ResponseWriter, r *http.Request) error {
+func (s *APIServer) handleJokesById(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
 		id, err := getId(r)
 		if err != nil {
 			return err
 		}
 
-		joke, err := s.store.GetJokeById(id)
+		joke, err := s.db.GetJokeById(id)
 		if err != nil {
 			return err
 		}
@@ -102,13 +103,27 @@ func getId(r *http.Request) (int, error) {
 }
 
 func getPage(r *http.Request) (int, error) {
+	pageDefault := 1
 	pageStr := r.URL.Query().Get("page")
+
+	// Validate params
+	if len(r.URL.Query()) > 1 || (len(r.URL.Query()) == 1 && pageStr == "") {
+		return 0, fmt.Errorf("invalid query params: only 'page' parameter allowed")
+	}
+
+	// If 'page' parameter is not provided, return the default page
 	if pageStr == "" {
-		return 1, nil // default page
+		return pageDefault, nil
 	}
-	page, err := strconv.Atoi(pageStr)
+
+	pageNum, err := strconv.Atoi(pageStr)
 	if err != nil {
-		return 0, fmt.Errorf("invalid page given %s", pageStr)
+		return 0, fmt.Errorf("invalid page number: %s", pageStr)
 	}
-	return page, nil
+
+	if pageNum < 1 {
+		return 0, fmt.Errorf("page number must be greater than 0")
+	}
+
+	return pageNum, nil
 }
