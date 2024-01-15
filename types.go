@@ -7,7 +7,7 @@ type Joke struct {
 	Punchline string `json:"punchline"`
 }
 
-type Jokes struct {
+type JokesResults struct {
 	Total      int     `json:"total"`
 	TotalPages int     `json:"total_pages"`
 	Page       int     `json:"page"`

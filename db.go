@@ -11,7 +11,7 @@ import (
 )
 
 type DB interface {
-	GetJokes(page int) ([]*Joke, error)
+	GetJokes(page int) (*JokesResults, error)
 	GetJokeById(int) (*Joke, error)
 	// GetJokeRandom() (*Joke, error)
 }
@@ -70,12 +70,18 @@ func (s *PostgresDB) GetJokeById(id int) (*Joke, error) {
 	return nil, fmt.Errorf("joke %d not found", id)
 }
 
-func (s *PostgresDB) GetJokes(page int) ([]*Joke, error) {
-	if page <= 0 {
-		page = 1
+func (s *PostgresDB) GetJokes(page int) (*JokesResults, error) {
+	offset := (page - 1) * 20
+	var count int
+	err := s.db.QueryRow("SELECT COUNT(*) FROM joke").Scan(&count)
+	if err != nil {
+		return nil, err
 	}
 
-	offset := (page - 1) * 20
+	totalPages := (count + 20 - 1) / 20
+	if page > totalPages {
+		return nil, fmt.Errorf("requested page %d is greater than total pages %d", page, totalPages)
+	}
 
 	rows, err := s.db.Query(
 		"SELECT * FROM joke LIMIT $1 OFFSET $2",
@@ -93,7 +99,14 @@ func (s *PostgresDB) GetJokes(page int) ([]*Joke, error) {
 		jokes = append(jokes, joke)
 	}
 
-	return jokes, nil
+	jokesResults := &JokesResults{
+		Total:      count,
+		TotalPages: totalPages,
+		Page:       page,
+		Results:    jokes,
+	}
+
+	return jokesResults, nil
 }
 
 func scanIntoJoke(rows *sql.Rows) (*Joke, error) {

@@ -108,7 +108,7 @@ func getPage(r *http.Request) (int, error) {
 
 	// Validate params
 	if len(r.URL.Query()) > 1 || (len(r.URL.Query()) == 1 && pageStr == "") {
-		return 0, fmt.Errorf("invalid query params: only 'page' parameter allowed")
+		return 0, fmt.Errorf("invalid query param: only 'page' param is allowed")
 	}
 
 	// If 'page' parameter is not provided, return the default page
