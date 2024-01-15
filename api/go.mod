@@ -1,4 +1,4 @@
-module github.com/liuhe2020
+module github.com/liuhe2020/daddys-got-jokes
 
 go 1.21.6
 
