@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -13,7 +15,7 @@ import (
 type DB interface {
 	GetJokes(page int) (*JokesResults, error)
 	GetJokeById(int) (*Joke, error)
-	// GetJokeRandom() (*Joke, error)
+	GetJokeRandom() (*Joke, error)
 }
 
 type PostgresDB struct {
@@ -25,17 +27,14 @@ func NewPostgresDB() (*PostgresDB, error) {
 	if err != nil {
 		log.Fatalf("Error loading environment variables file")
 	}
-
 	connStr := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
 	}
-
 	if err := db.Ping(); err != nil {
 		return nil, err
 	}
-
 	return &PostgresDB{
 		db: db,
 	}, nil
@@ -52,7 +51,6 @@ func (s *PostgresDB) createJokeTable() error {
 		setup text,
 		punchline text,
 	)`
-
 	_, err := s.db.Exec(query)
 	return err
 }
@@ -62,11 +60,9 @@ func (s *PostgresDB) GetJokeById(id int) (*Joke, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	for rows.Next() {
 		return scanIntoJoke(rows)
 	}
-
 	return nil, fmt.Errorf("joke %d not found", id)
 }
 
@@ -77,19 +73,16 @@ func (s *PostgresDB) GetJokes(page int) (*JokesResults, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	totalPages := (count + 20 - 1) / 20
 	if page > totalPages {
 		return nil, fmt.Errorf("requested page %d is greater than total pages %d", page, totalPages)
 	}
-
 	rows, err := s.db.Query(
 		"SELECT * FROM joke LIMIT $1 OFFSET $2",
 		20, offset)
 	if err != nil {
 		return nil, err
 	}
-
 	jokes := []*Joke{}
 	for rows.Next() {
 		joke, err := scanIntoJoke(rows)
@@ -98,15 +91,32 @@ func (s *PostgresDB) GetJokes(page int) (*JokesResults, error) {
 		}
 		jokes = append(jokes, joke)
 	}
-
 	jokesResults := &JokesResults{
 		Total:      count,
 		TotalPages: totalPages,
 		Page:       page,
 		Results:    jokes,
 	}
-
 	return jokesResults, nil
+}
+
+func (s *PostgresDB) GetJokeRandom() (*Joke, error) {
+	var count int
+	err := s.db.QueryRow("SELECT COUNT(*) FROM joke").Scan(&count)
+	if err != nil {
+		return nil, err
+	}
+	source := rand.NewSource(time.Now().UnixNano())
+	rng := rand.New(source)
+	randID := rng.Intn(count) + 1
+	rows, err := s.db.Query("select * from joke where id = $1", randID)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		return scanIntoJoke(rows)
+	}
+	return nil, fmt.Errorf("joke not found")
 }
 
 func scanIntoJoke(rows *sql.Rows) (*Joke, error) {
@@ -117,6 +127,5 @@ func scanIntoJoke(rows *sql.Rows) (*Joke, error) {
 		&joke.Setup,
 		&joke.Punchline,
 	)
-
 	return joke, err
 }

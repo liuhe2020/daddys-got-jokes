@@ -15,6 +15,12 @@ type APIServer struct {
 	db         DB
 }
 
+type apiFunc func(http.ResponseWriter, *http.Request) error
+
+type ApiError struct {
+	Error string `json:"error"`
+}
+
 func NewAPIServer(listenAddr string, db DB) *APIServer {
 	return &APIServer{
 		listenAddr: listenAddr,
@@ -27,7 +33,7 @@ func (s *APIServer) Run() {
 
 	router.HandleFunc("/jokes", makeHTTPHandleFunc(s.handleJokes))
 	router.HandleFunc("/joke/{id}", makeHTTPHandleFunc(s.handleJokesById))
-	// router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokesRandom))
+	router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokeRandom))
 
 	log.Println("JSON API server running on port: ", s.listenAddr)
 
@@ -56,15 +62,24 @@ func (s *APIServer) handleJokesById(w http.ResponseWriter, r *http.Request) erro
 		if err != nil {
 			return err
 		}
-
 		joke, err := s.db.GetJokeById(id)
 		if err != nil {
 			return err
 		}
-
 		return WriteJSON(w, http.StatusOK, joke)
 	}
 
+	return fmt.Errorf("method not allowed %s", r.Method)
+}
+
+func (s *APIServer) handleJokeRandom(w http.ResponseWriter, r *http.Request) error {
+	if r.Method == "GET" {
+		joke, err := s.db.GetJokeRandom()
+		if err != nil {
+			return err
+		}
+		return WriteJSON(w, http.StatusOK, joke)
+	}
 	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
@@ -77,12 +92,6 @@ func WriteJSON(w http.ResponseWriter, status int, v any) error {
 
 func permissionDenied(w http.ResponseWriter) {
 	WriteJSON(w, http.StatusForbidden, ApiError{Error: "permission denied"})
-}
-
-type apiFunc func(http.ResponseWriter, *http.Request) error
-
-type ApiError struct {
-	Error string `json:"error"`
 }
 
 func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
@@ -105,25 +114,20 @@ func getId(r *http.Request) (int, error) {
 func getPage(r *http.Request) (int, error) {
 	pageDefault := 1
 	pageStr := r.URL.Query().Get("page")
-
 	// Validate params
 	if len(r.URL.Query()) > 1 || (len(r.URL.Query()) == 1 && pageStr == "") {
 		return 0, fmt.Errorf("invalid query param: only 'page' param is allowed")
 	}
-
 	// If 'page' parameter is not provided, return the default page
 	if pageStr == "" {
 		return pageDefault, nil
 	}
-
 	pageNum, err := strconv.Atoi(pageStr)
 	if err != nil {
 		return 0, fmt.Errorf("invalid page number: %s", pageStr)
 	}
-
 	if pageNum < 1 {
 		return 0, fmt.Errorf("page number must be greater than 0")
 	}
-
 	return pageNum, nil
 }
