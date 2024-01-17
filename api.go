@@ -33,7 +33,7 @@ func (s *APIServer) Run() {
 
 	router.HandleFunc("/jokes", makeHTTPHandleFunc(s.handleJokes))
 	router.HandleFunc("/joke/{id}", makeHTTPHandleFunc(s.handleJokesById))
-	router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokeRandom))
+	router.HandleFunc("/joke", makeHTTPHandleFunc(s.handleJokeRandom))
 
 	log.Println("JSON API server running on port: ", s.listenAddr)
 
