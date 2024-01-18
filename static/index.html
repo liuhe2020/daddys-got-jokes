@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="../public/images/favicon.ico" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <title>Daddy's Got Jokes</title>
+  </head>
+  <body class="font-['JetBrains_Mono'] bg-[FBFDFC]">
+    <header class="max-w-7xl">
+      <nav class="">
+        <ul></ul>
+      </nav>
+    </header>
+    <main class="p-4 max-w-7xl lg:p-10 lg:mx-auto xl:px-0">
+      <section class="grid gap-6 place-items-center lg:grid-cols-2 lg:gap-12">
+        <div class="space-y-8">
+          <h1 class="font-['Press_Start_2P'] font-black leading-tight text-2xl xl:text-4xl">Daddy's Got Jokes API</h1>
+          <h2 class="font-medium text-xl leading-relaxed">The easiest and quickest way to have fresh comedy served from a REST API</h2>
+        </div>
+        <div class="max-w-md">
+          <img src="../public/images/hero.jpg" alt="laughing dog" class="" />
+        </div>
+      </section>
+      <section class="w-[460px]">
+        <div class="border-l-[6px] border-t-[6px] border-b-8 border-r-[8px] border-black relative">
+          <span class="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white"></span>
+          <span class="absolute -bottom-2 -left-2 w-2 h-2 bg-white"></span>
+          <span class="absolute -top-2 -right-2 w-4 h-4 bg-white"></span>
+          <span class="absolute -bottom-2 -right-2 w-2 h-2 bg-white"></span>
+          <span class="absolute top-0 left-0 bg-white w-full h-1.5"></span>
+          <span class="absolute bottom-0 right-0 bg-gray-500 w-full h-2"></span>
+          <span class="absolute top-0 right-0 bg-gray-500 w-2 h-full"></span>
+          <span class="absolute top-0 left-0 bg-white w-1.5 h-full"></span>
+          <span class="absolute top-0 left-0 w-1.5 h-1.5 bg-black"></span>
+          <span class="absolute top-0 right-0 w-2 h-2 bg-gray-500"></span>
+          <div class="bg-gray-200 p-16">
+            <div class="relative border-[6px] border-black">
+              <span class="absolute -top-1.5 -left-1.5 w-1.5 h-1.5 bg-gray-200"></span>
+              <span class="absolute -bottom-2 -left-2 w-2 h-2 bg-gray-200"></span>
+              <span class="absolute -top-2 -right-2 w-2 h-2 bg-gray-200"></span>
+              <span class="absolute -bottom-2 -right-2 w-2 h-2 bg-gray-200"></span>
+              <span class="absolute -bottom-2 left-0 w-full h-2 bg-gray-400"></span>
+              <span class="absolute top-0 -left-2 w-1.5 h-full bg-gray-400"></span>
+              <div class="bg-black text-green-500 font-bold p-4 mx-auto aspect-[4/3] overflow-x-auto">
+                <pre><code id="code" class="whitespace-pre"></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-96 mx-auto border-[6px] border-black">
+          <button class="">Get Joke</button>
+        </div>
+      </section>
+      <script>
+        var typed = new Typed('#code', {
+          strings: [`fetch('https://daddysgotjokes.com/jokes')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
+          typeSpeed: 50,
+        });
+      </script>
+    </main>
+  </body>
+</html>

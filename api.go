@@ -34,6 +34,9 @@ func (s *APIServer) Run() {
 	router.HandleFunc("/jokes", makeHTTPHandleFunc(s.handleJokes))
 	router.HandleFunc("/joke/{id}", makeHTTPHandleFunc(s.handleJokesById))
 	router.HandleFunc("/joke", makeHTTPHandleFunc(s.handleJokeRandom))
+	router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokeRandom))
+
+	router.HandleFunc("/", indexHandler)
 
 	log.Println("JSON API server running on port: ", s.listenAddr)
 
@@ -42,7 +45,6 @@ func (s *APIServer) Run() {
 
 func (s *APIServer) handleJokes(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
-
 		page, err := getPage(r)
 		if err != nil {
 			return err
@@ -68,7 +70,6 @@ func (s *APIServer) handleJokesById(w http.ResponseWriter, r *http.Request) erro
 		}
 		return WriteJSON(w, http.StatusOK, joke)
 	}
-
 	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
