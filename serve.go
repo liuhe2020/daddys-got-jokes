@@ -36,6 +36,12 @@ func staticHandler(w http.ResponseWriter, r *http.Request) {
 	if strings.HasSuffix(path, "js") {
 		w.Header().Set("Content-Type", "text/javascript")
 	}
+	if strings.HasSuffix(path, "png") || strings.HasSuffix(path, "jpg") {
+		w.Header().Set("Content-Type", "image/*")
+	}
+	if strings.HasSuffix(path, "ico") {
+		w.Header().Set("Content-Type", "image/vnd.microsoft.icon")
+	}
 	// make sure you reference the correct absolute path
 	data, err := os.ReadFile(staticDir + path[1:])
 	if err != nil {
