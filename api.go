@@ -10,40 +10,41 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type APIServer struct {
+type Server struct {
 	listenAddr string
 	db         DB
 }
 
-type apiFunc func(http.ResponseWriter, *http.Request) error
+type serveFunc func(http.ResponseWriter, *http.Request) error
 
 type ApiError struct {
 	Error string `json:"error"`
 }
 
-func NewAPIServer(listenAddr string, db DB) *APIServer {
-	return &APIServer{
+func NewServer(listenAddr string, db DB) *Server {
+	return &Server{
 		listenAddr: listenAddr,
 		db:         db,
 	}
 }
 
-func (s *APIServer) Run() {
+func (s *Server) Run() {
 	router := mux.NewRouter()
-
+	// api
 	router.HandleFunc("/jokes", makeHTTPHandleFunc(s.handleJokes))
 	router.HandleFunc("/joke/{id}", makeHTTPHandleFunc(s.handleJokesById))
 	router.HandleFunc("/joke", makeHTTPHandleFunc(s.handleJokeRandom))
 	router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokeRandom))
-
-	router.HandleFunc("/", indexHandler)
+	router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokeRandom))
+	// static
+	fs := http.FileServer(http.Dir("public"))
+	router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
 
 	log.Println("JSON API server running on port: ", s.listenAddr)
-
-	http.ListenAndServe(s.listenAddr, router)
+	log.Fatal(http.ListenAndServe(s.listenAddr, router))
 }
 
-func (s *APIServer) handleJokes(w http.ResponseWriter, r *http.Request) error {
+func (s *Server) handleJokes(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
 		page, err := getPage(r)
 		if err != nil {
@@ -58,7 +59,7 @@ func (s *APIServer) handleJokes(w http.ResponseWriter, r *http.Request) error {
 	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
-func (s *APIServer) handleJokesById(w http.ResponseWriter, r *http.Request) error {
+func (s *Server) handleJokesById(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
 		id, err := getId(r)
 		if err != nil {
@@ -73,7 +74,7 @@ func (s *APIServer) handleJokesById(w http.ResponseWriter, r *http.Request) erro
 	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
-func (s *APIServer) handleJokeRandom(w http.ResponseWriter, r *http.Request) error {
+func (s *Server) handleJokeRandom(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
 		joke, err := s.db.GetJokeRandom()
 		if err != nil {
@@ -95,7 +96,7 @@ func permissionDenied(w http.ResponseWriter) {
 	WriteJSON(w, http.StatusForbidden, ApiError{Error: "permission denied"})
 }
 
-func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
+func makeHTTPHandleFunc(f serveFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := f(w, r); err != nil {
 			WriteJSON(w, http.StatusBadRequest, ApiError{Error: err.Error()})
