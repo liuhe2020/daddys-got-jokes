@@ -6,7 +6,10 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
+	"github.com/didip/tollbooth/v7"
+	"github.com/didip/tollbooth/v7/limiter"
 	"github.com/gorilla/mux"
 )
 
@@ -21,6 +24,11 @@ type ApiError struct {
 	Error string `json:"error"`
 }
 
+type Message struct {
+	Status string `json:"status"`
+	Body   string `json:"body"`
+}
+
 func NewServer(listenAddr string, db DB) *Server {
 	return &Server{
 		listenAddr: listenAddr,
@@ -29,13 +37,15 @@ func NewServer(listenAddr string, db DB) *Server {
 }
 
 func (s *Server) Run() {
+	// rate limiter - 100/day & 10/minute
+	limiter := tollbooth.NewLimiter(0.0694444, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Hour})
+	limiter.SetBurst(10)
+
 	router := mux.NewRouter()
 	// api
-	router.HandleFunc("/jokes", makeHTTPHandleFunc(s.handleJokes))
-	router.HandleFunc("/joke/{id}", makeHTTPHandleFunc(s.handleJokesById))
-	router.HandleFunc("/joke", makeHTTPHandleFunc(s.handleJokeRandom))
-	router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokeRandom))
-	router.HandleFunc("/joke/random", makeHTTPHandleFunc(s.handleJokeRandom))
+	router.Handle("/jokes", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokes)))
+	router.Handle("/joke/{id}", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokesById)))
+	router.Handle("/joke", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokeRandom)))
 	// static
 	fs := http.FileServer(http.Dir("public"))
 	router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
@@ -90,10 +100,6 @@ func WriteJSON(w http.ResponseWriter, status int, v any) error {
 	w.WriteHeader(status)
 
 	return json.NewEncoder(w).Encode(v)
-}
-
-func permissionDenied(w http.ResponseWriter) {
-	WriteJSON(w, http.StatusForbidden, ApiError{Error: "permission denied"})
 }
 
 func makeHTTPHandleFunc(f serveFunc) http.HandlerFunc {
