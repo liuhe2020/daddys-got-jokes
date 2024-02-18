@@ -1,6 +1,6 @@
 module github.com/liuhe2020/daddys-got-jokes
 
-go 1.21.6
+go 1.22
 
 require (
 	github.com/didip/tollbooth/v7 v7.0.1 // indirect
