@@ -6,28 +6,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="public/images/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <title>Daddy's Got Jokes</title>
   </head>
-  <body class="font-['JetBrains_Mono'] bg-[FBFDFC]">
+  <body class="font-['JetBrains_Mono'] bg-[FBFDFC]" id="body">
     <header class="max-w-7xl">
       <nav class="">
         <ul></ul>
       </nav>
     </header>
-    <main class="p-4 max-w-7xl lg:p-10 lg:mx-auto xl:px-0">
+    <main class="p-4 max-w-4xl space-y-32 lg:p-10 lg:mx-auto xl:px-0">
       <section class="grid gap-6 place-items-center lg:grid-cols-2 lg:gap-12">
         <div class="space-y-8">
-          <h1 class="font-['Press_Start_2P'] font-black leading-tight text-2xl xl:text-4xl">Daddy's Got Jokes API</h1>
+          <h1 class="font-['Press_Start_2P'] font-black text-2xl xl:text-4xl xl:leading-relaxed">Daddy's Got Jokes API</h1>
           <h2 class="font-medium text-xl leading-relaxed">The easiest and quickest way to have fresh comedy served from a REST API</h2>
         </div>
-        <div class="max-w-md">
-          <img src="public/images/hero.jpg" alt="laughing dog" class="" />
+        <div class="max-w-sm">
+          <img src="images/hero.jpg" alt="laughing dog" class="" />
         </div>
       </section>
-      <section class="w-[460px]">
+      <section class="w-[460px] mx-auto">
         <div class="border-l-[6px] border-t-[6px] border-b-8 border-r-[8px] border-black relative">
           <span class="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white"></span>
           <span class="absolute -bottom-2 -left-2 w-2 h-2 bg-white"></span>
@@ -53,8 +53,58 @@
             </div>
           </div>
         </div>
-        <div class="w-96 mx-auto border-[6px] border-black">
-          <button class="">Get</button>
+        <div class="w-96 mx-auto border-[6px] border-black relative">
+          <div class="px-8 py-4 gap-8 flex relative">
+            <button
+              class="relative shrink-0 px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0]"
+            >
+              Get Joke
+            </button>
+            <div class="w-full flex flex-col justify-center">
+              <div class="w-full bg-black h-2"></div>
+              <div class="w-full bg-gray-300 h-2"></div>
+            </div>
+            <span class="absolute right-0 top-0 w-1.5 h-full bg-gray-500"></span>
+          </div>
+          <span class="block w-full h-1.5 bg-gray-500"></span>
+          <span class="absolute -left-1.5 -left-1.5 w-1.5 h-1.5 bg-white"></span>
+          <span class="absolute -bottom-1.5 -right-1.5 w-1.5 h-1.5 bg-white"></span>
+        </div>
+      </section>
+      <section class="space-y-8">
+        <h2 class="font-['Press_Start_2P'] font-black leading-tight text-2xl xl:text-4xl">End points</h2>
+        <p class="font-medium text-xl">The end points support HTTP and HTTPS.</p>
+        <div class="space-y-4">
+          <div class="space-x-8">
+            <span class="inline-block px-6 py-2 bg-[209cee] font-['Press_Start_2P'] text-white">GET</span>
+            <span class="font-medium text-xl">/joke</span>
+          </div>
+          <div class="space-x-8">
+            <span class="inline-block px-6 py-2 bg-[209cee] font-['Press_Start_2P'] text-white">GET</span>
+            <span class="font-medium text-xl">/joke/1</span>
+          </div>
+          <div class="space-x-8">
+            <span class="inline-block px-6 py-2 bg-[209cee] font-['Press_Start_2P'] text-white">GET</span>
+            <span class="font-medium text-xl">/jokes</span>
+          </div>
+        </div>
+      </section>
+      <section class="space-y-8">
+        <h2 class="font-['Press_Start_2P'] font-black leading-tight text-2xl xl:text-4xl">Guide</h2>
+        <div class="">
+          <h3 class="font-medium text-xl">Get a random joke</h3>
+          <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/joke')</span>
+  <!--   --><span>.then(res => res.json())</span>
+  <!--   --><span>.then(data => console.log(data))</span></code></pre>
+        </div>
+        <div class="">
+          <h3 class="font-medium text-xl">Output</h3>
+          <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre">{
+  <!--   -->id: 2574,
+  <!--   -->type: 'factory',
+  <!--   -->setup: 'Why was the man fired from the orange juice factory?',
+  <!--   -->punchline: 'Because he couldn't concentrate.'
+<!--   -->}</code></pre>
         </div>
       </section>
       <script>
