@@ -54,9 +54,9 @@
           </div>
         </div>
         <div class="w-96 mx-auto border-[6px] border-black relative">
-          <div class="px-8 py-4 gap-8 flex relative">
+          <div class="px-8 py-6 gap-8 flex relative">
             <button
-              class="relative shrink-0 px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0]"
+              class="relative shrink-0 px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3]"
             >
               Get Joke
             </button>
@@ -91,11 +91,16 @@
       </section>
       <section class="space-y-8">
         <h2 class="font-['Press_Start_2P'] font-black leading-tight text-2xl xl:text-4xl">Guide</h2>
-        <div class="">
-          <h3 class="font-medium text-xl">Get a random joke</h3>
-          <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/joke')</span>
+        <div class="border border-4 border-black relative">
+          <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get a random joke</h3>
+          <pre class="font-bold px-9 py-6 overflow-x-auto"><code class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/joke')</span>
   <!--   --><span>.then(res => res.json())</span>
   <!--   --><span>.then(data => console.log(data))</span></code></pre>
+          <button
+            class="absolute bottom-0 right-0 shrink-0 px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_3px_#000,0_-3px_#000,3px_0_#000,-3px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-3px_-3px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_3px_3px_#006bb3]"
+          >
+            Copy
+          </button>
         </div>
         <div class="">
           <h3 class="font-medium text-xl">Output</h3>
