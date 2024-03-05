@@ -97,13 +97,19 @@
   <!--   --><span>.then(res => res.json())</span>
   <!--   --><span>.then(data => console.log(data))</span></code></pre>
           <button
-            class="absolute bottom-0 right-0 shrink-0 px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_3px_#000,0_-3px_#000,3px_0_#000,-3px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-3px_-3px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_3px_3px_#006bb3]"
+            class="absolute bottom-0 right-0 shrink-0 px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_-4px_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3]"
           >
             Copy
           </button>
         </div>
-        <div class="">
-          <h3 class="font-medium text-xl">Output</h3>
+        <button
+          id="toggleButton"
+          data-target="result1"
+          class="relative shrink-0 px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3]"
+        >
+          Show result
+        </button>
+        <div id="result1" class="hidden">
           <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre">{
   <!--   -->id: 2574,
   <!--   -->type: 'factory',
@@ -113,9 +119,32 @@
         </div>
       </section>
       <script>
-        var typed = new Typed('#code', {
+        const typed = new Typed('#code', {
           strings: [`fetch('https://daddysgotjokes.com/jokes')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
           typeSpeed: 50,
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+          const buttons = document.querySelectorAll('#toggleButton');
+
+          buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+              toggleResult(this);
+            });
+          });
+
+          function toggleResult(button) {
+            const targetId = button.getAttribute('data-target');
+            const resultDiv = document.getElementById(targetId);
+
+            if (resultDiv.classList.contains('hidden')) {
+              resultDiv.classList.remove('hidden');
+              button.textContent = 'Hide Result';
+            } else {
+              resultDiv.classList.add('hidden');
+              button.textContent = 'Show Result';
+            }
+          }
         });
       </script>
     </main>
