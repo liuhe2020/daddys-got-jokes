@@ -95,10 +95,14 @@
         <div class="space-y-8">
           <div class="border border-4 border-black relative">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get a random joke</h3>
-            <pre class="font-bold px-9 py-6 overflow-x-auto"><code class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/joke')</span>
+            <pre
+              class="font-bold px-9 py-6 overflow-x-auto"
+            ><code class="whitespace-pre" data-copy="copy1"><span>fetch('https://daddysgotjokes.com/joke')</span>
   <!--   --><span>.then(res => res.json())</span>
   <!--   --><span>.then(data => console.log(data))</span></code></pre>
             <button
+              id="copyButton"
+              data-target="copy1"
               class="absolute bottom-0 right-0 shrink-0 w-[88px] px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_-4px_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3]"
             >
               Copy
@@ -122,8 +126,8 @@
         </div>
         <div class="space-y-8">
           <div class="border border-4 border-black relative">
-            <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get a random joke</h3>
-            <pre class="font-bold px-9 py-6 overflow-x-auto"><code class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/joke')</span>
+            <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get a joke by id</h3>
+            <pre class="font-bold px-9 py-6 overflow-x-auto"><code class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/joke/1')</span>
   <!--   --><span>.then(res => res.json())</span>
   <!--   --><span>.then(data => console.log(data))</span></code></pre>
             <button
@@ -139,17 +143,17 @@
           </div>
           <button
             id="toggleButton"
-            data-target="result1"
+            data-target="result2"
             class="relative shrink-0 px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3]"
           >
             Show result
           </button>
-          <div id="result1" class="hidden">
+          <div id="result2" class="hidden">
             <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre">{
-  <!--   -->id: 2574,
-  <!--   -->type: 'factory',
-  <!--   -->setup: 'Why was the man fired from the orange juice factory?',
-  <!--   -->punchline: 'Because he couldn't concentrate.'
+  <!--   -->id: 1,
+  <!--   -->type: 'Dad Jokes',
+  <!--   -->setup: 'Which state has the most streets?',
+  <!--   -->punchline: 'Rhode Island.'
 <!--   -->}</code></pre>
           </div>
         </div>

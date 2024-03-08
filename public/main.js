@@ -4,6 +4,7 @@ const typed = new Typed('#code', {
 });
 
 const buttons = document.querySelectorAll('#toggleButton');
+const copyButtons = document.querySelectorAll('#copyButton');
 
 buttons.forEach(function (button) {
   button.addEventListener('click', function () {
@@ -11,9 +12,15 @@ buttons.forEach(function (button) {
   });
 });
 
+copyButtons.forEach(function (button) {
+  button.addEventListener('click', function () {
+    copyContent(this);
+  });
+});
+
 function toggleResult(button) {
   const targetId = button.getAttribute('data-target');
-  const resultDiv = document.getElementById(targetId);
+  const resultDiv = document.querySelector(`#${targetId}`);
 
   if (resultDiv.classList.contains('hidden')) {
     resultDiv.classList.remove('hidden');
@@ -22,4 +29,9 @@ function toggleResult(button) {
     resultDiv.classList.add('hidden');
     button.textContent = 'Show Result';
   }
+}
+
+function copyContent(button) {
+  const targetId = button.getAttribute('data-target');
+  console.log(targetId);
 }
