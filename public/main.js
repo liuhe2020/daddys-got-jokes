@@ -1,6 +1,26 @@
 const typed = new Typed('#code', {
-  strings: [`fetch('https://daddysgotjokes.com/jokes')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
+  strings: [`fetch('https://www.daddysgotjokes.com/joke')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
   typeSpeed: 50,
+});
+
+const fetchButton = document.querySelector('#fetchButton');
+
+fetchButton.addEventListener('click', async function () {
+  fetchButton.disabled = true;
+  fetchButton.innerHTML = `<span class="loader"></span>`;
+
+  try {
+    const res = await fetch(`${window.location.href}/joke`);
+    const data = await res.json();
+
+    typed.strings = [JSON.stringify(data, null, 2)];
+    typed.reset();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    fetchButton.disabled = false;
+    fetchButton.innerHTML = 'Get Joke';
+  }
 });
 
 const buttons = document.querySelectorAll('#toggleButton');
