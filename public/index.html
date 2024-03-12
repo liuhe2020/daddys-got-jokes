@@ -50,7 +50,7 @@
               <span class="absolute -bottom-2 left-0 w-full h-2 bg-gray-400"></span>
               <span class="absolute top-0 -left-2 w-1.5 h-full bg-gray-400"></span>
               <div class="bg-black text-green-500 font-bold p-4 mx-auto aspect-[16/9] overflow-x-auto">
-                <pre><code id="code" class="break-words"></code></pre>
+                <pre><code id="code"></code></pre>
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@
         <div class="space-y-8">
           <div class="border border-4 border-black relative">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get a random joke</h3>
-            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy1" class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/joke')</span>
+            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy1" class="whitespace-pre"><span>fetch('https://www.daddysgotjokes.com/joke')</span>
   <!--   --><span>.then(res => res.json())</span>
   <!--   --><span>.then(data => console.log(data))</span></code></pre>
             <button
@@ -127,7 +127,7 @@
         <div class="space-y-8">
           <div class="border border-4 border-black relative">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get a joke by id</h3>
-            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy2" class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/joke/1')</span>
+            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy2" class="whitespace-pre"><span>fetch('https://www.daddysgotjokes.com/joke/1')</span>
   <!--   --><span>.then(res => res.json())</span>
   <!--   --><span>.then(data => console.log(data))</span></code></pre>
             <button
@@ -157,7 +157,7 @@
         <div class="space-y-8">
           <div class="border border-4 border-black relative">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get jokes</h3>
-            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy3" class="whitespace-pre"><span>fetch('https://daddysgotjokes.com/jokes')</span>
+            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy3" class="whitespace-pre"><span>fetch('https://www.daddysgotjokes.com/jokes')</span>
   <!--   --><span>.then(res => res.json())</span>
   <!--   --><span>.then(data => console.log(data))</span></code></pre>
             <button
@@ -168,6 +168,10 @@
               Copy
             </button>
           </div>
+          <div class="space-y-4">
+            <p>Query param - page, value - number. The default returns page 1.</p>
+            <p class="border border-black px-2 py-1">Example - https://www.daddysgotjokes.com/jokes?page=2</p>
+          </div>
           <button
             id="toggleButton"
             data-target="result3"
@@ -177,8 +181,8 @@
           </button>
           <div id="result3" class="hidden">
             <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre">{
-  <!--   -->total: 4000,
-  <!--   -->total_pages: 20,
+  <!--   -->total: 3000,
+  <!--   -->total_pages: 150,
   <!--   -->page: 1,
   <!--   -->results: [
   <!--   -->  {
