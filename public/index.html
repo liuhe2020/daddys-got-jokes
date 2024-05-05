@@ -49,8 +49,8 @@
               <span class="absolute -bottom-2 -right-2 w-2 h-2 bg-gray-200"></span>
               <span class="absolute -bottom-2 left-0 w-full h-2 bg-gray-400"></span>
               <span class="absolute top-0 -left-2 w-1.5 h-full bg-gray-400"></span>
-              <div class="bg-black text-green-500 font-bold p-4 mx-auto aspect-[16/9] overflow-x-auto">
-                <pre><code id="code"></code></pre>
+              <div class="bg-black text-green-500 font-medium p-4 mx-auto aspect-[16/9] overflow-x-auto">
+                <pre><code id="code" class="font-['JetBrains_Mono']"></code></pre>
               </div>
             </div>
           </div>
@@ -92,14 +92,16 @@
           </div>
         </div>
       </section>
-      <section class="space-y-16">
-        <h2 class="font-['Press_Start_2P'] font-black leading-tight text-2xl xl:text-4xl">Guide</h2>
+      <section class="space-y-20">
         <div class="space-y-8">
+          <h2 class="pb-4 font-['Press_Start_2P'] font-black leading-tight text-2xl xl:text-4xl">Guide</h2>
           <div class="border border-4 border-black relative">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get a random joke</h3>
-            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy1" class="whitespace-pre"><span>fetch('https://www.daddysgotjokes.com/joke')</span>
-  <!--   --><span>.then(res => res.json())</span>
-  <!--   --><span>.then(data => console.log(data))</span></code></pre>
+            <pre
+              class="font-medium px-9 py-6 overflow-x-auto"
+            ><code id="copy1" class="whitespace-pre"><span class="font-['JetBrains_Mono']">fetch('https://www.daddysgotjokes.com/joke')</span>
+  <!--   --><span class="font-['JetBrains_Mono']">.then(res => res.json())</span>
+  <!--   --><span class="font-['JetBrains_Mono']">.then(data => console.log(data))</span></code></pre>
             <button
               id="copyButton"
               data-target="copy1"
@@ -116,20 +118,22 @@
             Show result
           </button>
           <div id="result1" class="hidden">
-            <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre">{
+            <pre class="bg-black text-green-500 font-medium p-6 overflow-x-auto"><code class="whitespace-pre font-['JetBrains_Mono']">{
   <!--   -->id: 2574,
-  <!--   -->type: 'factory',
-  <!--   -->setup: 'Why was the man fired from the orange juice factory?',
-  <!--   -->punchline: 'Because he couldn't concentrate.'
+  <!--   -->type: "factory",
+  <!--   -->setup: "Why was the man fired from the orange juice factory?",
+  <!--   -->punchline: "Because he couldn't concentrate."
 <!--   -->}</code></pre>
           </div>
         </div>
         <div class="space-y-8">
           <div class="border border-4 border-black relative">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get a joke by id</h3>
-            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy2" class="whitespace-pre"><span>fetch('https://www.daddysgotjokes.com/joke/1')</span>
-  <!--   --><span>.then(res => res.json())</span>
-  <!--   --><span>.then(data => console.log(data))</span></code></pre>
+            <pre
+              class="font-medium px-9 py-6 overflow-x-auto"
+            ><code id="copy2" class="whitespace-pre"><span class="font-['JetBrains_Mono']">fetch('https://www.daddysgotjokes.com/joke/1')</span>
+  <!--   --><span class="font-['JetBrains_Mono']">.then(res => res.json())</span>
+  <!--   --><span class="font-['JetBrains_Mono']">.then(data => console.log(data))</span></code></pre>
             <button
               id="copyButton"
               data-target="copy2"
@@ -146,20 +150,22 @@
             Show result
           </button>
           <div id="result2" class="hidden">
-            <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre">{
+            <pre class="bg-black text-green-500 font-medium p-6 overflow-x-auto"><code class="whitespace-pre font-['JetBrains_Mono']">{
   <!--   -->id: 1,
-  <!--   -->type: 'Dad Jokes',
-  <!--   -->setup: 'Which state has the most streets?',
-  <!--   -->punchline: 'Rhode Island.'
+  <!--   -->type: "Dad Jokes",
+  <!--   -->setup: "Which state has the most streets?",
+  <!--   -->punchline: "Rhode Island."
 <!--   -->}</code></pre>
           </div>
         </div>
         <div class="space-y-8">
           <div class="border border-4 border-black relative">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-xl">Get jokes</h3>
-            <pre class="font-bold px-9 py-6 overflow-x-auto"><code id="copy3" class="whitespace-pre"><span>fetch('https://www.daddysgotjokes.com/jokes')</span>
-  <!--   --><span>.then(res => res.json())</span>
-  <!--   --><span>.then(data => console.log(data))</span></code></pre>
+            <pre
+              class="font-medium px-9 py-6 overflow-x-auto"
+            ><code id="copy3" class="whitespace-pre"><span class="font-['JetBrains_Mono']">fetch('https://www.daddysgotjokes.com/jokes')</span>
+  <!--   --><span class="font-['JetBrains_Mono']">.then(res => res.json())</span>
+  <!--   --><span class="font-['JetBrains_Mono']">.then(data => console.log(data))</span></code></pre>
             <button
               id="copyButton"
               data-target="copy3"
@@ -168,9 +174,30 @@
               Copy
             </button>
           </div>
-          <div class="space-y-4">
-            <p>Query param - page, value - number. The default returns page 1.</p>
-            <p class="border border-black px-2 py-1">Example - https://www.daddysgotjokes.com/jokes?page=2</p>
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <p class="font-bold">Query param</p>
+              <table class="table-auto border border-black">
+                <thead>
+                  <tr>
+                    <th class="border-2 border-black px-4 py-2 text-left font-medium">Key</th>
+                    <th class="border-2 border-black px-4 py-2 text-left font-medium">Value</th>
+                    <th class="border-2 border-black px-4 py-2 text-left font-medium">Handle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="border-2 border-black px-4 py-2 text-left font-medium">page</td>
+                    <td class="border-2 border-black px-4 py-2 text-left font-medium">number</td>
+                    <td class="border-2 border-black px-4 py-2 text-left font-medium">/jokes?page=[number]</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="space-y-2">
+              <p class="font-bold">Example</p>
+              <pre><code class="font-['JetBrains_Mono'] font-medium">https://www.daddysgotjokes.com/jokes?page=3</code></pre>
+            </div>
           </div>
           <button
             id="toggleButton"
@@ -180,18 +207,18 @@
             Show result
           </button>
           <div id="result3" class="hidden">
-            <pre class="bg-black text-green-500 font-bold p-6 overflow-x-auto"><code class="whitespace-pre">{
+            <pre class="bg-black text-green-500 font-medium p-6 overflow-x-auto"><code class="whitespace-pre font-['JetBrains_Mono']">{
   <!--   -->total: 3000,
   <!--   -->total_pages: 150,
-  <!--   -->page: 1,
+  <!--   -->page: 3,
   <!--   -->results: [
   <!--   -->  {
-  <!--   -->    id: 1,
-  <!--   -->    type: 'Dad Jokes',
-  <!--   -->    setup: 'Which state has the most streets?',
-  <!--   -->    punchline: 'Rhode Island.'
+  <!--   -->    id: 41,
+  <!--   -->    type: "computer",
+  <!--   -->    setup: "What does a baby computer call his father?",
+  <!--   -->    punchline: "Data."
   <!--   -->  },
-  <!--   -->  ...
+  <!--   -->  ...more
   <!--   -->]
 <!--   -->}</code></pre>
           </div>
