@@ -12,7 +12,6 @@ fetchButton.addEventListener('click', async function () {
   try {
     const res = await fetch(`${window.location.href}/joke`);
     const data = await res.json();
-
     typed.strings = [JSON.stringify(data, null, 2)];
     typed.reset();
   } catch (err) {
@@ -70,3 +69,12 @@ function copyContent(button) {
     button.disabled = false;
   }, 2500);
 }
+
+async function getYear() {
+  const footer = document.querySelector('#footer');
+  const response = await fetch(`${window.location.href}/year`);
+  const year = await response.json();
+  footer.textContent = year;
+}
+
+getYear();

@@ -46,6 +46,7 @@ func (s *Server) Run() {
 	router.Handle("/jokes", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokes)))
 	router.Handle("/joke/{id}", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokesById)))
 	router.Handle("/joke", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokeRandom)))
+	router.Handle("/year", makeHTTPHandleFunc(s.handleYear))
 	// static
 	fs := http.FileServer(http.Dir("public"))
 	router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
@@ -93,6 +94,11 @@ func (s *Server) handleJokeRandom(w http.ResponseWriter, r *http.Request) error 
 		return WriteJSON(w, http.StatusOK, joke)
 	}
 	return fmt.Errorf("method not allowed %s", r.Method)
+}
+
+func (s *Server) handleYear(w http.ResponseWriter, r *http.Request) error {
+	currentYear := strconv.Itoa(time.Now().Year())
+	return WriteJSON(w, http.StatusOK, currentYear)
 }
 
 func WriteJSON(w http.ResponseWriter, status int, v any) error {
