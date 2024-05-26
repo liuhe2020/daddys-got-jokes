@@ -1,6 +1,14 @@
 const typed = new Typed('#code', {
-  strings: [`fetch('https://www.daddysgotjokes.com/joke')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
+  strings: [`fetch('${window.location.href}joke')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
   typeSpeed: 50,
+});
+
+const year = document.querySelector('#year');
+year.innerText = new Date().getFullYear();
+
+const navIcon = document.querySelector('#nav-icon');
+navIcon.addEventListener('click', function () {
+  this.classList.toggle('open');
 });
 
 const fetchButton = document.querySelector('#fetchButton');
@@ -10,7 +18,7 @@ fetchButton.addEventListener('click', async function () {
   fetchButton.innerHTML = `<span class="loader"></span>`;
 
   try {
-    const res = await fetch(`${window.location.href}/joke`);
+    const res = await fetch(`${window.location.href}joke`);
     const data = await res.json();
     typed.strings = [JSON.stringify(data, null, 2)];
     typed.reset();
@@ -59,8 +67,9 @@ function copyContent(button) {
   </svg>`;
   const targetId = button.getAttribute('data-target');
   const snippet = document.querySelector(`#${targetId}`).innerText;
+  const cleanedSnippet = snippet.replace(/\s+(?=\.then)/g, '');
 
-  navigator.clipboard.writeText(snippet);
+  navigator.clipboard.writeText(cleanedSnippet);
   button.innerHTML = svg;
   button.disabled = true;
 
@@ -69,12 +78,3 @@ function copyContent(button) {
     button.disabled = false;
   }, 2500);
 }
-
-async function getYear() {
-  const footer = document.querySelector('#footer');
-  const response = await fetch(`${window.location.href}/year`);
-  const year = await response.json();
-  footer.textContent = year;
-}
-
-getYear();
