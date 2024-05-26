@@ -13,7 +13,7 @@
     <script defer src="main.js"></script>
     <title>Daddy's Got Jokes</title>
   </head>
-  <body class="font-['JetBrains_Mono'] bg-[FBFDFC]" id="body">
+  <body class="font-['JetBrains_Mono']" id="body">
     <header class="p-4 justify-between flex-wrap gap-4 max-w-4xl flex md:flex md:p-10 md:mx-auto xl:px-0">
       <h1 class="inline-block font-['Press_Start_2P'] pb-2 pt-3 h-10 px-4 cursor-default text-[0.6rem] bg-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] md:text-xs">
         Daddy's Got Jokes
@@ -33,7 +33,7 @@
       <section class="grid gap-6 place-items-center lg:grid-cols-2 lg:gap-12">
         <div class="space-y-8">
           <h1 class="font-['Press_Start_2P'] font-black text-lg md:text-2xl xl:text-4xl xl:leading-relaxed">Daddy's Got Jokes API</h1>
-          <h2 class="font-medium md:text-xl leading-relaxed">The easiest and quickest way to have fresh comedy served from a REST API</h2>
+          <h2 class="font-medium md:text-xl leading-relaxed">The easiest and quickest way to have fresh comedy served from a REST API.</h2>
         </div>
         <div class="max-w-sm">
           <img src="images/hero.webp" alt="laughing dog" />
@@ -51,7 +51,7 @@
           <span class="absolute top-0 left-0 bg-white w-1.5 h-full"></span>
           <span class="absolute top-0 left-0 w-1.5 h-1.5 bg-black"></span>
           <span class="absolute top-0 right-0 w-2 h-2 bg-gray-500"></span>
-          <div class="bg-gray-200 p-20">
+          <div class="bg-stone-100 p-20">
             <div class="relative border-[6px] border-black">
               <span class="absolute -top-1.5 -left-1.5 w-1.5 h-1.5 bg-gray-200"></span>
               <span class="absolute -bottom-2 -left-2 w-2 h-2 bg-gray-200"></span>
@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="max-w-[32rem] mx-auto border-[6px] border-black relative">
-          <div class="p-8 gap-12 flex relative justify-center bg-white">
+          <div class="p-8 gap-12 flex relative justify-center bg-stone-100">
             <button
               id="fetchButton"
               class="relative flex justify-center shrink-0 px-4 py-2 w-36 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3] disabled:active:before:shadow-[inset_-4px_-4px_#006bb3] disabled:hover:bg-[209cee]"
@@ -199,14 +199,14 @@
                   <tr>
                     <td class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">page</td>
                     <td class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">number</td>
-                    <td class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">/jokes?page=[number]</td>
+                    <td class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">/jokes?page=number</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <div class="space-y-2">
               <h4 class="font-bold">Example</h4>
-              <p class="font-['JetBrains_Mono'] font-medium break-words">https://www.daddysgotjokes.com/jokes?page=3</p>
+              <p class="font-['JetBrains_Mono'] font-medium break-words">https://www.daddysgotjokes.com/jokes?page=2</p>
             </div>
           </div>
           <button
@@ -244,7 +244,7 @@
     </main>
     <footer class="pt-20 px-4 pb-4 font-['Press_Start_2P'] text-[0.675rem] max-w-4xl md:p-10 md:mx-auto xl:px-0" id="footer">
       <p class="">&#169; <span id="year">
-        </span> Daddy's Got Jokes by <a href="https://liuhe.dev/" target="_blank" class="hover:text-[209cee]">liuhe.dev</a>
+        </span> Daddy's Got Jokes developed by <a href="https://liuhe.dev/" target="_blank" class="hover:text-[209cee]">liuhe.dev</a>
       </p>
     </footer>
   </body>
