@@ -14,20 +14,20 @@
     <title>Daddy's Got Jokes</title>
   </head>
   <body class="font-['JetBrains_Mono'] bg-[FBFDFC]" id="body">
-    <header class="p-4 flex justify-between items-center gap-4 max-w-4xl md:p-10 md:mx-auto xl:px-0">
-      <h1 class="font-['Press_Start_2P'] py-2.5 px-4 cursor-default text-[0.6rem] shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] md:text-xs">
+    <header class="p-4 justify-between flex-wrap gap-4 max-w-4xl flex md:flex md:p-10 md:mx-auto xl:px-0">
+      <h1 class="inline-block font-['Press_Start_2P'] pb-2 pt-3 h-10 px-4 cursor-default text-[0.6rem] bg-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] md:text-xs">
         Daddy's Got Jokes
       </h1>
-      <a class="hidden md:flex items-center gap-2 relative text-xs px-4 py-2 font-['Press_Start_2P'] bg-[209cee] text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3]"" href="https://www.buymeacoffee.com/daddysgotjokes" target="_blank">
+      <a class="inline-flex items-center gap-2 relative text-[0.6rem] px-4 py-2 h-10 font-['Press_Start_2P'] bg-[209cee] text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3] md:text-xs" href="https://www.buymeacoffee.com/daddysgotjokes" target="_blank">
         <span class="font-['Press_Start_2P']">Buy me a coffee</span>
         <img src="images/coffee.png" alt="coffee" width="28" height="" />
       </a>
-      <div class="nav-icon shrink-0 md:hidden" id="nav-icon">
+      <!-- <div class="nav-icon shrink-0 md:hidden" id="nav-icon">
         <span></span>
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </div> -->
     </header>
     <main class="p-4 mt-12 space-y-32 max-w-4xl md:p-10 md:mx-auto xl:px-0">
       <section class="grid gap-6 place-items-center lg:grid-cols-2 lg:gap-12">
@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="max-w-[32rem] mx-auto border-[6px] border-black relative">
-          <div class="p-8 gap-12 flex relative justify-center">
+          <div class="p-8 gap-12 flex relative justify-center bg-white">
             <button
               id="fetchButton"
               class="relative flex justify-center shrink-0 px-4 py-2 w-36 font-['Press_Start_2P'] bg-[209cee] text-sm text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3] disabled:active:before:shadow-[inset_-4px_-4px_#006bb3] disabled:hover:bg-[209cee]"
@@ -105,7 +105,7 @@
       <section class="space-y-20">
         <div class="space-y-8">
           <h2 class="pb-4 font-['Press_Start_2P'] font-black leading-tight text-lg md:text-2xl xl:text-4xl">Guide</h2>
-          <div class="border border-4 border-black relative">
+          <div class="border border-4 border-black relative bg-white">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-md lg:text-xl">Get a random joke</h3>
             <pre
               class="font-medium text-sm px-9 py-6 overflow-x-auto md:text-base"
@@ -137,7 +137,7 @@
           </div>
         </div>
         <div class="space-y-8">
-          <div class="border border-4 border-black relative">
+          <div class="border border-4 border-black relative bg-white">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-md lg:text-xl">Get a joke by id</h3>
             <pre
               class="font-medium text-sm px-9 py-6 overflow-x-auto md:text-base"
@@ -169,7 +169,7 @@
           </div>
         </div>
         <div class="space-y-8">
-          <div class="border border-4 border-black relative">
+          <div class="border border-4 border-black relative bg-white">
             <h3 class="absolute bg-[FBFDFC] -top-4 left-6 px-3 font-bold text-md lg:text-xl">Get jokes</h3>
             <pre
               class="font-medium text-sm px-9 py-6 overflow-x-auto md:text-base"
@@ -187,7 +187,7 @@
           <div class="space-y-6">
             <div class="space-y-2 overflow-x-auto">
               <h4 class="font-bold">Query param</h4>
-              <table class="table-auto border border-black">
+              <table class="table-auto border border-black bg-white">
                 <thead>
                   <tr>
                     <th class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">Key</th>
@@ -242,6 +242,10 @@
         </div>
       </section>
     </main>
-    <footer class="pt-20 px-4 pb-4 font-['Press_Start_2P'] text-[0.675rem] max-w-4xl md:p-10 md:mx-auto xl:px-0" id="footer"><p class="">&#169; <span id="year"></span> Daddy's Got Jokes by <a href="https://liuhe.dev/" target="_blank" class="hover:text-[209cee]">liuhe.dev</a></p></footer>
+    <footer class="pt-20 px-4 pb-4 font-['Press_Start_2P'] text-[0.675rem] max-w-4xl md:p-10 md:mx-auto xl:px-0" id="footer">
+      <p class="">&#169; <span id="year">
+        </span> Daddy's Got Jokes by <a href="https://liuhe.dev/" target="_blank" class="hover:text-[209cee]">liuhe.dev</a>
+      </p>
+    </footer>
   </body>
 </html>

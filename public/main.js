@@ -6,10 +6,10 @@ const typed = new Typed('#code', {
 const year = document.querySelector('#year');
 year.innerText = new Date().getFullYear();
 
-const navIcon = document.querySelector('#nav-icon');
-navIcon.addEventListener('click', function () {
-  this.classList.toggle('open');
-});
+// const navIcon = document.querySelector('#nav-icon');
+// navIcon.addEventListener('click', function () {
+//   this.classList.toggle('open');
+// });
 
 const fetchButton = document.querySelector('#fetchButton');
 
