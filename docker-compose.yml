@@ -1,0 +1,9 @@
+services:
+  daddys-got-jokes:
+    container_name: daddys-got-jokes
+    image: daddys-got-jokes
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '8000:8000'
