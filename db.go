@@ -3,12 +3,13 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
+
+	// "log"
 	"math/rand"
 	"os"
 	"time"
 
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -23,10 +24,11 @@ type PostgresDB struct {
 }
 
 func NewPostgresDB() (*PostgresDB, error) {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading environment variables file")
-	}
+	// load .env if using go run or air, no need if using docker
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatalf("Error loading environment variables file")
+	// }
 	connStr := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -40,20 +42,20 @@ func NewPostgresDB() (*PostgresDB, error) {
 	}, nil
 }
 
-// func (s *PostgresDB) Init() error {
-// 	return s.createJokeTable()
-// }
+func (s *PostgresDB) Init() error {
+	return s.createJokeTable()
+}
 
-// func (s *PostgresDB) createJokeTable() error {
-// 	query := `create table if not exists joke (
-// 		id serial primary key,
-// 		type text,
-// 		setup text,
-// 		punchline text,
-// 	)`
-// 	_, err := s.db.Exec(query)
-// 	return err
-// }
+func (s *PostgresDB) createJokeTable() error {
+	query := `create table if not exists joke (
+		id serial primary key,
+		type text,
+		setup text,
+		punchline text
+	)`
+	_, err := s.db.Exec(query)
+	return err
+}
 
 func (s *PostgresDB) GetJokeById(id int) (*Joke, error) {
 	rows, err := s.db.Query("select * from joke where id = $1", id)

@@ -10,10 +10,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// if err := db.Init(); err != nil {
-	// 	log.Fatal(err)
-	// }
+	if err := db.Init(); err != nil {
+		log.Fatal(err)
+	}
 
-	server := NewServer(":8000", db)
+	server := NewServer(":8080", db)
 	server.Run()
 }

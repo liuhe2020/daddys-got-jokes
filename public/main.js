@@ -1,6 +1,6 @@
 const typed = new Typed('#code', {
   strings: [`fetch('${window.location.href}joke')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
-  typeSpeed: 50,
+  typeSpeed: 20,
 });
 
 const year = document.querySelector('#year');
