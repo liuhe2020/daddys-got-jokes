@@ -37,10 +37,7 @@ func NewServer(listenAddr string, db DB) *Server {
 }
 
 func (s *Server) Run() {
-	// rate limiter - 100/day & 10/minute
-	limiter := tollbooth.NewLimiter(0.0694444, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Hour})
-	limiter.SetBurst(10)
-
+	limiter := initLimiter()
 	router := mux.NewRouter()
 	// api
 	router.Handle("/jokes", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokes)))
@@ -98,7 +95,6 @@ func (s *Server) handleJokeRandom(w http.ResponseWriter, r *http.Request) error 
 func WriteJSON(w http.ResponseWriter, status int, v any) error {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
-
 	return json.NewEncoder(w).Encode(v)
 }
 
@@ -138,4 +134,13 @@ func getPage(r *http.Request) (int, error) {
 		return 0, fmt.Errorf("page number must be greater than 0")
 	}
 	return pageNum, nil
+}
+
+func initLimiter() *limiter.Limiter {
+	// rate limiter - 100/day & 10/minute
+	lmt := tollbooth.NewLimiter(0.0694444, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Hour})
+	lmt.SetBurst(10)
+	lmt.SetMessage("Rate limit exceeded. Please try again later.")
+	lmt.SetMessageContentType("text/plain; charset=utf-8")
+	return lmt
 }

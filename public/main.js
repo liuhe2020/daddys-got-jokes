@@ -19,12 +19,19 @@ fetchButton.addEventListener('click', async function () {
 
   try {
     const res = await fetch(`${window.location.href}joke`);
+    if (!res.ok) {
+      if (res.status === 429) {
+        typed.strings = [await res.text()];
+        return;
+      }
+      throw new Error('An error occurred, please try again later.');
+    }
     const data = await res.json();
     typed.strings = [JSON.stringify(data, null, 2)];
-    typed.reset();
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    typed.strings = [error.message];
   } finally {
+    typed.reset();
     fetchButton.disabled = false;
     fetchButton.innerHTML = 'Get Joke';
   }
