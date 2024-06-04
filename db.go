@@ -3,13 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
-
-	// "log"
-	"math/rand"
+	"log"
 	"os"
-	"time"
 
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -25,10 +22,10 @@ type PostgresDB struct {
 
 func NewPostgresDB() (*PostgresDB, error) {
 	// load .env if using go run or air, no need if using docker
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Fatalf("Error loading environment variables file")
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading environment variables file")
+	}
 	connStr := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -47,7 +44,7 @@ func (s *PostgresDB) Init() error {
 }
 
 func (s *PostgresDB) createJokeTable() error {
-	query := `create table if not exists joke (
+	query := `CREATE TABLE IF NOT EXISTS joke (
 		id serial primary key,
 		type text,
 		setup text,
@@ -58,7 +55,7 @@ func (s *PostgresDB) createJokeTable() error {
 }
 
 func (s *PostgresDB) GetJokeById(id int) (*Joke, error) {
-	rows, err := s.db.Query("select * from joke where id = $1", id)
+	rows, err := s.db.Query("SELECT * FROM joke WHERE id = $1", id)
 	if err != nil {
 		return nil, err
 	}
@@ -103,15 +100,7 @@ func (s *PostgresDB) GetJokes(page int) (*JokesResults, error) {
 }
 
 func (s *PostgresDB) GetJokeRandom() (*Joke, error) {
-	var count int
-	err := s.db.QueryRow("SELECT COUNT(*) FROM joke").Scan(&count)
-	if err != nil {
-		return nil, err
-	}
-	source := rand.NewSource(time.Now().UnixNano())
-	rng := rand.New(source)
-	randID := rng.Intn(count) + 1
-	rows, err := s.db.Query("select * from joke where id = $1", randID)
+	rows, err := s.db.Query("SELECT * FROM joke ORDER BY RANDOM() LIMIT 1")
 	if err != nil {
 		return nil, err
 	}
