@@ -1,27 +1,22 @@
 const fetchButton = document.querySelector('#fetchButton');
+const buttons = document.querySelectorAll('#toggleButton');
+const copyButtons = document.querySelectorAll('#copyButton');
+const year = document.querySelector('#year');
+year.innerText = new Date().getFullYear();
 
 const typed = new Typed('#code', {
   strings: [`fetch('${window.location.href}joke')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
   typeSpeed: 20,
-  onBegin: () => {
-    fetchButton.disabled = true;
-    fetchButton.innerHTML = `<span class="loader"></span>`;
-  },
   onComplete: () => {
     fetchButton.disabled = false;
     fetchButton.innerHTML = 'Get Joke';
   },
 });
 
-const year = document.querySelector('#year');
-year.innerText = new Date().getFullYear();
-
-// const navIcon = document.querySelector('#nav-icon');
-// navIcon.addEventListener('click', function () {
-//   this.classList.toggle('open');
-// });
-
 fetchButton.addEventListener('click', async function () {
+  fetchButton.disabled = true;
+  fetchButton.innerHTML = `<span class="loader"></span>`;
+
   try {
     const res = await fetch(`${window.location.href}joke`);
     if (!res.ok) {
@@ -39,9 +34,6 @@ fetchButton.addEventListener('click', async function () {
     typed.reset();
   }
 });
-
-const buttons = document.querySelectorAll('#toggleButton');
-const copyButtons = document.querySelectorAll('#copyButton');
 
 buttons.forEach(function (button) {
   button.addEventListener('click', function () {
@@ -88,3 +80,8 @@ function copyContent(button) {
     button.disabled = false;
   }, 2500);
 }
+
+// const navIcon = document.querySelector('#nav-icon');
+// navIcon.addEventListener('click', function () {
+//   this.classList.toggle('open');
+// });
