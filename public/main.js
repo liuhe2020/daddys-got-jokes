@@ -1,6 +1,16 @@
+const fetchButton = document.querySelector('#fetchButton');
+
 const typed = new Typed('#code', {
   strings: [`fetch('${window.location.href}joke')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
   typeSpeed: 20,
+  onBegin: () => {
+    fetchButton.disabled = true;
+    fetchButton.innerHTML = `<span class="loader"></span>`;
+  },
+  onComplete: () => {
+    fetchButton.disabled = false;
+    fetchButton.innerHTML = 'Get Joke';
+  },
 });
 
 const year = document.querySelector('#year');
@@ -11,12 +21,7 @@ year.innerText = new Date().getFullYear();
 //   this.classList.toggle('open');
 // });
 
-const fetchButton = document.querySelector('#fetchButton');
-
 fetchButton.addEventListener('click', async function () {
-  fetchButton.disabled = true;
-  fetchButton.innerHTML = `<span class="loader"></span>`;
-
   try {
     const res = await fetch(`${window.location.href}joke`);
     if (!res.ok) {
@@ -28,12 +33,10 @@ fetchButton.addEventListener('click', async function () {
     }
     const data = await res.json();
     typed.strings = [JSON.stringify(data, null, 2)];
-  } catch (error) {
-    typed.strings = [error.message];
+  } catch (err) {
+    typed.strings = [err.message];
   } finally {
     typed.reset();
-    fetchButton.disabled = false;
-    fetchButton.innerHTML = 'Get Joke';
   }
 });
 
