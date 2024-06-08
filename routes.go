@@ -63,7 +63,7 @@ func (s *Server) handleJokes(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (s *Server) handleJokesById(w http.ResponseWriter, r *http.Request) error {
-	id, err := getId(r)
+	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		return err
 	}
@@ -94,15 +94,6 @@ func makeHTTPHandleFunc(f serveFunc) http.HandlerFunc {
 			WriteJSON(w, http.StatusBadRequest, ApiError{Error: err.Error()})
 		}
 	}
-}
-
-func getId(r *http.Request) (int, error) {
-	idStr := r.PathValue("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		return id, fmt.Errorf("invalid id given %s", idStr)
-	}
-	return id, nil
 }
 
 func getPage(r *http.Request) (int, error) {
