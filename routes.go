@@ -12,32 +12,28 @@ import (
 	"github.com/didip/tollbooth/v7/limiter"
 )
 
-type Server struct {
-	listenAddr string
-	db         DB
-}
-
-type serveFunc func(http.ResponseWriter, *http.Request) error
+type ServeFunc func(http.ResponseWriter, *http.Request) error
 
 type ApiError struct {
 	Error string `json:"error"`
 }
 
-type Message struct {
-	Status string `json:"status"`
-	Body   string `json:"body"`
+type Server struct {
+	addr string
+	db   DB
 }
 
-func NewServer(listenAddr string, db DB) *Server {
+func NewServer(addr string, db DB) *Server {
 	return &Server{
-		listenAddr: listenAddr,
-		db:         db,
+		addr: addr,
+		db:   db,
 	}
 }
 
-func (s *Server) Run() {
+func (s *Server) Run() error {
 	limiter := initLimiter()
 	mux := http.NewServeMux()
+
 	// api
 	mux.Handle("GET /jokes", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokes)))
 	mux.Handle("GET /joke/{id}", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokesById)))
@@ -46,8 +42,13 @@ func (s *Server) Run() {
 	fs := http.FileServer(http.Dir("public"))
 	mux.Handle("/", fs)
 
-	log.Println("Daddy's Got Jokes is running on port ", s.listenAddr)
-	log.Fatal(http.ListenAndServe(s.listenAddr, mux))
+	server := http.Server{
+		Addr:    s.addr,
+		Handler: mux,
+	}
+	log.Printf("Daddy's Got Jokes is running on port %s", s.addr)
+
+	return server.ListenAndServe()
 }
 
 func (s *Server) handleJokes(w http.ResponseWriter, r *http.Request) error {
@@ -88,10 +89,10 @@ func WriteJSON(w http.ResponseWriter, status int, v any) error {
 	return json.NewEncoder(w).Encode(v)
 }
 
-func makeHTTPHandleFunc(f serveFunc) http.HandlerFunc {
+func makeHTTPHandleFunc(f ServeFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := f(w, r); err != nil {
-			WriteJSON(w, http.StatusBadRequest, ApiError{Error: err.Error()})
+			WriteJSON(w, http.StatusForbidden, ApiError{Error: err.Error()})
 		}
 	}
 }
@@ -120,7 +121,7 @@ func getPage(r *http.Request) (int, error) {
 func initLimiter() *limiter.Limiter {
 	// rate limiter - 100/day & 10/minute
 	lmt := tollbooth.NewLimiter(0.0694444, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Hour})
-	lmt.SetBurst(10)
+	lmt.SetBurst(3)
 	lmt.SetMessage("Rate limit exceeded. Please try again later.")
 	lmt.SetMessageContentType("text/plain; charset=utf-8")
 	return lmt

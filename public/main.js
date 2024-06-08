@@ -6,7 +6,7 @@ year.innerText = new Date().getFullYear();
 
 const typed = new Typed('#code', {
   strings: [`fetch('${window.location.href}joke')\n.then(res => res.json())\n.then(data => console.log(data))\n\n( ͡ᵔ ͜ʖ ͡ᵔ )`],
-  typeSpeed: 20,
+  typeSpeed: 15,
   onComplete: () => {
     fetchButton.disabled = false;
     fetchButton.innerHTML = 'Get Joke';
