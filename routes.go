@@ -10,7 +10,6 @@ import (
 
 	"github.com/didip/tollbooth/v7"
 	"github.com/didip/tollbooth/v7/limiter"
-	"github.com/gorilla/mux"
 )
 
 type Server struct {
@@ -38,58 +37,49 @@ func NewServer(listenAddr string, db DB) *Server {
 
 func (s *Server) Run() {
 	limiter := initLimiter()
-	router := mux.NewRouter()
+	mux := http.NewServeMux()
 	// api
-	router.Handle("/jokes", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokes)))
-	router.Handle("/joke/{id}", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokesById)))
-	router.Handle("/joke", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokeRandom)))
-	// static
+	mux.Handle("GET /jokes", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokes)))
+	mux.Handle("GET /joke/{id}", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokesById)))
+	mux.Handle("GET /joke", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokeRandom)))
+	// static assets
 	fs := http.FileServer(http.Dir("public"))
-	router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
+	mux.Handle("/", fs)
 
 	log.Println("Daddy's Got Jokes is running on port ", s.listenAddr)
-	log.Fatal(http.ListenAndServe(s.listenAddr, router))
+	log.Fatal(http.ListenAndServe(s.listenAddr, mux))
 }
 
 func (s *Server) handleJokes(w http.ResponseWriter, r *http.Request) error {
-	if r.Method == "GET" {
-		page, err := getPage(r)
-		if err != nil {
-			return err
-		}
-		jokes, err := s.db.GetJokes(page)
-		if err != nil {
-			return err
-		}
-		return WriteJSON(w, http.StatusOK, jokes)
+	page, err := getPage(r)
+	if err != nil {
+		return err
 	}
-	return fmt.Errorf("method not allowed %s", r.Method)
+	jokes, err := s.db.GetJokes(page)
+	if err != nil {
+		return err
+	}
+	return WriteJSON(w, http.StatusOK, jokes)
 }
 
 func (s *Server) handleJokesById(w http.ResponseWriter, r *http.Request) error {
-	if r.Method == "GET" {
-		id, err := getId(r)
-		if err != nil {
-			return err
-		}
-		joke, err := s.db.GetJokeById(id)
-		if err != nil {
-			return err
-		}
-		return WriteJSON(w, http.StatusOK, joke)
+	id, err := getId(r)
+	if err != nil {
+		return err
 	}
-	return fmt.Errorf("method not allowed %s", r.Method)
+	joke, err := s.db.GetJokeById(id)
+	if err != nil {
+		return err
+	}
+	return WriteJSON(w, http.StatusOK, joke)
 }
 
 func (s *Server) handleJokeRandom(w http.ResponseWriter, r *http.Request) error {
-	if r.Method == "GET" {
-		joke, err := s.db.GetJokeRandom()
-		if err != nil {
-			return err
-		}
-		return WriteJSON(w, http.StatusOK, joke)
+	joke, err := s.db.GetJokeRandom()
+	if err != nil {
+		return err
 	}
-	return fmt.Errorf("method not allowed %s", r.Method)
+	return WriteJSON(w, http.StatusOK, joke)
 }
 
 func WriteJSON(w http.ResponseWriter, status int, v any) error {
@@ -107,7 +97,7 @@ func makeHTTPHandleFunc(f serveFunc) http.HandlerFunc {
 }
 
 func getId(r *http.Request) (int, error) {
-	idStr := mux.Vars(r)["id"]
+	idStr := r.PathValue("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		return id, fmt.Errorf("invalid id given %s", idStr)
