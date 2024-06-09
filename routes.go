@@ -6,10 +6,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
-	"github.com/didip/tollbooth/v7"
-	"github.com/didip/tollbooth/v7/limiter"
+	"github.com/go-chi/chi/v5"
 )
 
 type ServeFunc func(http.ResponseWriter, *http.Request) error
@@ -31,20 +29,17 @@ func NewServer(addr string, db DB) *Server {
 }
 
 func (s *Server) Run() error {
-	limiter := initLimiter()
-	mux := http.NewServeMux()
-
+	r := chi.NewRouter()
 	// api
-	mux.Handle("GET /jokes", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokes)))
-	mux.Handle("GET /joke/{id}", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokesById)))
-	mux.Handle("GET /joke", tollbooth.LimitHandler(limiter, makeHTTPHandleFunc(s.handleJokeRandom)))
-	// static assets
-	fs := http.FileServer(http.Dir("public"))
-	mux.Handle("/", fs)
+	r.Get("/joke", makeHTTPHandleFunc(s.handleJokeRandom))
+	r.Get("/joke/{id}", makeHTTPHandleFunc(s.handleJokesById))
+	r.Get("/jokes", makeHTTPHandleFunc(s.handleJokes))
+	// static
+	r.Handle("/*", http.StripPrefix("/", http.FileServer(http.Dir("public"))))
 
 	server := http.Server{
 		Addr:    s.addr,
-		Handler: mux,
+		Handler: r,
 	}
 	log.Printf("Daddy's Got Jokes is running on port %s", s.addr)
 
@@ -116,13 +111,4 @@ func getPage(r *http.Request) (int, error) {
 		return 0, fmt.Errorf("page number must be greater than 0")
 	}
 	return pageNum, nil
-}
-
-func initLimiter() *limiter.Limiter {
-	// rate limiter - 100/day & 10/minute
-	lmt := tollbooth.NewLimiter(0.0694444, &limiter.ExpirableOptions{DefaultExpirationTTL: time.Hour})
-	lmt.SetBurst(3)
-	lmt.SetMessage("Rate limit exceeded. Please try again later.")
-	lmt.SetMessageContentType("text/plain; charset=utf-8")
-	return lmt
 }
