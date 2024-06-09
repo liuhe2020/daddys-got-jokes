@@ -30,10 +30,17 @@ func NewServer(addr string, db DB) *Server {
 
 func (s *Server) Run() error {
 	r := chi.NewRouter()
+
+	r.MethodNotAllowed(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write([]byte("method is not valid"))
+	})
 	// api
-	r.Get("/joke", makeHTTPHandleFunc(s.handleJokeRandom))
-	r.Get("/joke/{id}", makeHTTPHandleFunc(s.handleJokesById))
-	r.Get("/jokes", makeHTTPHandleFunc(s.handleJokes))
+	r.Route("/joke", func(r chi.Router) {
+		r.Get("/", s.handleJokeRandom)
+		r.Get("/{id}", s.handleJokesById)
+	})
+	r.Get("/jokes", s.handleJokes)
 	// static
 	r.Handle("/*", http.StripPrefix("/", http.FileServer(http.Dir("public"))))
 
@@ -46,49 +53,53 @@ func (s *Server) Run() error {
 	return server.ListenAndServe()
 }
 
-func (s *Server) handleJokes(w http.ResponseWriter, r *http.Request) error {
+func (s *Server) handleJokes(w http.ResponseWriter, r *http.Request) {
 	page, err := getPage(r)
 	if err != nil {
-		return err
+		s.handleError(w, http.StatusBadRequest, err)
+		return
 	}
 	jokes, err := s.db.GetJokes(page)
 	if err != nil {
-		return err
+		s.handleError(w, http.StatusInternalServerError, err)
+		return
 	}
-	return WriteJSON(w, http.StatusOK, jokes)
+	WriteJSON(w, http.StatusOK, jokes)
 }
 
-func (s *Server) handleJokesById(w http.ResponseWriter, r *http.Request) error {
+func (s *Server) handleJokesById(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
-		return err
+		log.Println("failed to parse string id to an integer from url param")
+		return
 	}
 	joke, err := s.db.GetJokeById(id)
 	if err != nil {
-		return err
+		s.handleError(w, http.StatusBadRequest, err)
+		return
 	}
-	return WriteJSON(w, http.StatusOK, joke)
+	WriteJSON(w, http.StatusOK, joke)
 }
 
-func (s *Server) handleJokeRandom(w http.ResponseWriter, r *http.Request) error {
+func (s *Server) handleJokeRandom(w http.ResponseWriter, r *http.Request) {
 	joke, err := s.db.GetJokeRandom()
 	if err != nil {
-		return err
+		s.handleError(w, http.StatusInternalServerError, err)
+		return
 	}
-	return WriteJSON(w, http.StatusOK, joke)
+	WriteJSON(w, http.StatusOK, joke)
 }
 
-func WriteJSON(w http.ResponseWriter, status int, v any) error {
+func (s *Server) handleError(w http.ResponseWriter, status int, err error) {
+	log.Printf("error: %v", err)
+	WriteJSON(w, status, map[string]string{"error": err.Error()})
+}
+
+func WriteJSON(w http.ResponseWriter, status int, v interface{}) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
-	return json.NewEncoder(w).Encode(v)
-}
-
-func makeHTTPHandleFunc(f ServeFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if err := f(w, r); err != nil {
-			WriteJSON(w, http.StatusForbidden, ApiError{Error: err.Error()})
-		}
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		log.Printf("error encoding response: %v", err)
 	}
 }
 
