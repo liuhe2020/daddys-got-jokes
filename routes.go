@@ -38,19 +38,24 @@ func (s *Server) Run() error {
 	// 	w.Write([]byte("method is not valid"))
 	// })
 
-	r.Use(httprate.Limit(
-		1,
-		1*time.Second,
-		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
-			http.Error(w, "maximum requests reached, try again later", http.StatusTooManyRequests)
-		}),
-	))
 	// api
-	r.Route("/joke", func(r chi.Router) {
-		r.Get("/", s.handleJokeRandom)
-		r.Get("/{id}", s.handleJokesById)
+	r.Group(func(r chi.Router) {
+		r.Use(httprate.Limit(
+			100,
+			24*time.Hour,
+			httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+				http.Error(w, "maximum per-minute requests reached, try again later", http.StatusTooManyRequests)
+			}),
+		))
+
+		r.Route("/joke", func(r chi.Router) {
+			r.Get("/", s.handleJokeRandom)
+			r.Get("/{id}", s.handleJokesById)
+		})
+
+		r.Get("/jokes", s.handleJokes)
 	})
-	r.Get("/jokes", s.handleJokes)
+
 	// static
 	r.Handle("/*", http.StripPrefix("/", http.FileServer(http.Dir("public"))))
 
