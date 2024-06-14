@@ -7,12 +7,12 @@ import (
 func main() {
 	db, err := NewPostgresDB()
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("error %s", err)
 	}
 
-	if err := db.Init(); err != nil {
-		log.Fatal(err)
-	}
+	// if err := db.Init(); err != nil {
+	// 	log.Printf("error %s", err)
+	// }
 
 	server := NewServer(":8080", db)
 	server.Run()

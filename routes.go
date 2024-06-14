@@ -6,8 +6,10 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/httprate"
 )
 
 type ServeFunc func(http.ResponseWriter, *http.Request) error
@@ -31,10 +33,18 @@ func NewServer(addr string, db DB) *Server {
 func (s *Server) Run() error {
 	r := chi.NewRouter()
 
-	r.MethodNotAllowed(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		w.Write([]byte("method is not valid"))
-	})
+	// r.MethodNotAllowed(func(w http.ResponseWriter, r *http.Request) {
+	// 	w.WriteHeader(http.StatusMethodNotAllowed)
+	// 	w.Write([]byte("method is not valid"))
+	// })
+
+	r.Use(httprate.Limit(
+		1,
+		1*time.Second,
+		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+			http.Error(w, "maximum requests reached, try again later", http.StatusTooManyRequests)
+		}),
+	))
 	// api
 	r.Route("/joke", func(r chi.Router) {
 		r.Get("/", s.handleJokeRandom)

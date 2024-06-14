@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -24,15 +25,15 @@ func NewPostgresDB() (*PostgresDB, error) {
 	// load .env if using go run or air, no need if using docker
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error loading environment variables file")
+		log.Println("Error loading environment variables file")
 	}
 	connStr := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("failed to connect to db")
 	}
 	if err := db.Ping(); err != nil {
-		return nil, err
+		return nil, errors.New("failed to ping db")
 	}
 	return &PostgresDB{
 		db: db,
