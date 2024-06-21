@@ -32,7 +32,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 		r.Route("/jokes", func(r chi.Router) {
 			r.Get("/", s.handleJokes)
 		})
-
 	})
 
 	r.Get("/health", s.healthHandler)
