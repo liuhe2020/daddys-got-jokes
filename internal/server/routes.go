@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/a-h/templ"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httprate"
+	"github.com/liuhe2020/daddys-got-jokes/cmd/web"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {
@@ -34,9 +36,13 @@ func (s *Server) RegisterRoutes() http.Handler {
 		})
 	})
 
+	r.Get("/", templ.Handler(web.Base()).ServeHTTP)
+	fileServer := http.FileServer(http.FS(web.Files))
+	r.Handle("/assets/*", fileServer)
+
 	r.Get("/health", s.healthHandler)
 	// static
-	r.Handle("/*", http.StripPrefix("/", http.FileServer(http.Dir("public"))))
+	// r.Handle("/*", http.StripPrefix("/", http.FileServer(http.Dir("public"))))
 
 	log.Printf("Daddy's Got Jokes is running on port %d", s.port)
 	return r
