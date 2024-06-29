@@ -1,0 +1,9 @@
+package web
+
+templ Button(text string, dataTarget string) {
+	<button
+		id="toggleButton"
+		data-target={ dataTarget }
+		class="relative shrink-0 px-4 py-2 font-secondary bg-blue-primary text-[0.6rem] text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3] md:text-sm"
+	>{ text }</button>
+}
