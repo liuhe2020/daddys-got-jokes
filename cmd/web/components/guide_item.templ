@@ -20,26 +20,55 @@ templ copyButton(dataTarget string) {
 	</button>
 }
 
-templ GuideItem(title string, path string, copyDataTarget string, copyId string, resultDataTarget string, resultId string, result string) {
-	<div class="border-4 border-black relative bg-white">
-		<h3 class="absolute bg-white -top-4 left-6 px-3 font-bold text-md lg:text-xl">{ title }</h3>
-		<pre class="font-medium text-sm px-9 py-6 overflow-x-auto md:text-base">
-			<code id={ copyId } class="whitespace-pre">
-				<span class="font-primary">{ `fetch(https://www.daddysgotjokes.com/` }{ path }{ `)` }</span>
-				<br/>
-				<span class="font-primary">{ `.then(res => res.json())` }</span>
-				<br/>
-				<span class="font-primary">{ `.then(data => console.log(data))` }</span>
-			</code>
-		</pre>
-		@copyButton(copyDataTarget)
-	</div>
-	@toggleButton(resultDataTarget)
-	<div id={ resultId } class="hidden">
-		<pre class="bg-black text-green-500 text-sm font-medium p-6 overflow-x-auto md:text-base">
-			<code class="whitespace-pre font-primary">
-				@templ.Raw(result)
-			</code>
-		</pre>
+templ GuideItem(title string, path string, hasDetails bool, copyDataTarget string, copyId string, resultDataTarget string, resultId string, result string) {
+	<div class="space-y-8">
+		<div class="border-4 border-black relative bg-white">
+			<h3 class="absolute bg-white -top-4 left-6 px-3 font-bold text-md lg:text-xl">{ title }</h3>
+			<pre class="font-medium text-sm px-9 py-6 overflow-x-auto md:text-base">
+				<code id={ copyId } class="whitespace-pre">
+					<span class="font-primary">{ `fetch(https://www.daddysgotjokes.com/` }{ path }{ `)` }</span>
+					<br/>
+					<span class="font-primary">{ `.then(res => res.json())` }</span>
+					<br/>
+					<span class="font-primary">{ `.then(data => console.log(data))` }</span>
+				</code>
+			</pre>
+			@copyButton(copyDataTarget)
+		</div>
+		if hasDetails {
+			<div class="space-y-6">
+				<div class="space-y-2 overflow-x-auto">
+					<h4 class="font-bold">Query param</h4>
+					<table class="table-auto border border-black bg-white">
+						<thead>
+							<tr>
+								<th class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">Key</th>
+								<th class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">Value</th>
+								<th class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">Handle</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">page</td>
+								<td class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">number</td>
+								<td class="border-2 border-black px-2 py-1 text-left font-medium md:px-4 md:py-2">/jokes?page=number</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="space-y-2">
+					<h4 class="font-bold">Example</h4>
+					<p class="font-primary font-medium break-words">{ `https://www.daddysgotjokes.com/jokes?page=2 ` }</p>
+				</div>
+			</div>
+		}
+		@toggleButton(resultDataTarget)
+		<div id={ resultId } class="hidden">
+			<pre class="bg-black text-green-500 text-sm font-medium p-6 overflow-x-auto md:text-base">
+				<code class="whitespace-pre font-primary">
+					@templ.Raw(result)
+				</code>
+			</pre>
+		</div>
 	</div>
 }
