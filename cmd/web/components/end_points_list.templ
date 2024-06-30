@@ -1,0 +1,10 @@
+package components
+
+templ EndPointItem(method string, path string) {
+	<div class="space-x-8">
+		<span class="inline-block px-6 pb-1 pt-1.5 bg-blue-primary font-secondary text-white text-xs md:text-sm md:pb-2 md:pt-2.5">
+			{ method }
+		</span>
+		<span class="font-medium md:text-xl">/{ path }</span>
+	</div>
+}

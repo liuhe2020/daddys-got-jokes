@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* @layer base {
   .bg-grid::before {
-    @apply fixed inset-0 z-negative opacity-10;
+    @apply fixed inset-0 -z-10 opacity-10;
     content: '';
     background-color: #ffffff;
     background-image: linear-gradient(#d9d9d9 8px, transparent 8px), linear-gradient(90deg, #d9d9d9 8px, transparent 8px),
@@ -31,9 +31,9 @@
       transform: rotate(1turn);
     }
   }
-}
+} */
 
-/* body::before {
+body::before {
   content: '';
   position: fixed;
   top: 0;
@@ -47,9 +47,9 @@
   background-position: -8px -8px, -8px -8px, -4px -4px, -4px -4px;
   opacity: 0.1;
   z-index: -1;
-} */
+}
 
-/* .loader {
+.loader {
   width: 20px;
   --b: 4px;
   aspect-ratio: 1;
@@ -61,7 +61,7 @@
   -webkit-mask-composite: destination-in;
   mask-composite: intersect;
   animation: spin 1.2s infinite steps(10);
-} */
+}
 
 /* .nav-icon {
   width: 30px;
