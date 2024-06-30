@@ -36,7 +36,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 		})
 	})
 
-	r.Get("/", templ.Handler(web.Base()).ServeHTTP)
+	r.Get("/", templ.Handler(web.Home()).ServeHTTP)
 	fileServer := http.FileServer(http.FS(web.Files))
 	r.Handle("/assets/*", fileServer)
 
