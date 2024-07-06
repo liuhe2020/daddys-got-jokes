@@ -138,6 +138,10 @@ templ guide() {
 			for _, item := range guideItems {
 				@components.GuideItem(item.title, item.path, item.hasDetails, item.copyDataTarget, item.copyId, item.resultDataTarget, item.resultId, item.result)
 			}
+			<div class="space-y-2">
+				<h4 class="font-bold">Rate Limits</h4>
+				<p>100 requests per day</p>
+			</div>
 		</div>
 	</section>
 }

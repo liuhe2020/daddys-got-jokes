@@ -26,7 +26,7 @@ templ GuideItem(title string, path string, hasDetails bool, copyDataTarget strin
 			<h3 class="absolute bg-white -top-4 left-6 px-3 font-bold text-md lg:text-xl">{ title }</h3>
 			<pre class="font-medium text-sm px-9 py-6 overflow-x-auto md:text-base">
 				<code id={ copyId } class="whitespace-pre">
-					<span class="font-primary">{ `fetch(https://www.daddysgotjokes.com/` }{ path }{ `)` }</span>
+					<span class="font-primary">{ `fetch("https://www.daddysgotjokes.com/` }{ path }{ `")` }</span>
 					<br/>
 					<span class="font-primary">{ `.then(res => res.json())` }</span>
 					<br/>
