@@ -1,0 +1,147 @@
+package web
+
+import "github.com/liuhe2020/daddys-got-jokes/cmd/web/components"
+
+var endPointItems = []struct {
+	method string
+	path   string
+}{
+	{
+		method: "GET",
+		path:   "joke",
+	},
+	{
+		method: "GET",
+		path:   "joke/1",
+	},
+	{
+		method: "GET",
+		path:   "jokes",
+	},
+}
+
+var guideItems = []struct {
+	title            string
+	path             string
+	hasDetails       bool
+	copyDataTarget   string
+	resultDataTarget string
+	copyId           string
+	resultId         string
+	result           string
+}{
+	{
+		title:            "Get a random joke",
+		path:             "joke",
+		hasDetails:       false,
+		copyDataTarget:   "copy1",
+		copyId:           "copy1",
+		resultDataTarget: "result1",
+		resultId:         "result1",
+		result:           `{<br/>  id: 2574,<br/>  type: "factory",<br/>  setup: "Why was the man fired from the orange juice factory?",<br/>  	punchline: "Because he couldn't concentrate."<br/>}`,
+	},
+	{
+		title:            "Get a joke by id",
+		path:             "joke/1",
+		hasDetails:       false,
+		copyDataTarget:   "copy2",
+		copyId:           "copy2",
+		resultDataTarget: "result2",
+		resultId:         "result2",
+		result:           `{<br/>  id: 1,<br/>  type: "Dad Jokes",<br/>  setup: "Which state has the most streets?",<br/>  punchline: "Rhode Island."<br/>}`,
+	},
+	{
+		title:            "Get jokes",
+		path:             "jokes",
+		hasDetails:       true,
+		copyDataTarget:   "copy3",
+		copyId:           "copy3",
+		resultDataTarget: "result3",
+		resultId:         "result3",
+		result:           `{<br>  total: 3000,<br>  total_pages: 150,<br>  page: 3,<br>  results: [<br>    {<br>      id: 41,<br>      type: "computer",<br>      setup: "What does a baby computer call his father?",<br>      punchline: "Data."<br>    },<br>    ...19 more (total 20)<br>  ]<br>}`,
+	},
+}
+
+templ hero() {
+	<section class="grid gap-6 place-items-center lg:grid-cols-2 lg:gap-12">
+		<div class="space-y-8">
+			<h1 class="font-secondary font-black text-lg md:text-2xl xl:text-4xl xl:leading-relaxed">Daddy's Got Jokes API</h1>
+			<h2 class="font-medium md:text-xl leading-relaxed">The easiest and quickest way to have fresh comedy served from a REST API.</h2>
+		</div>
+		<div class="max-w-sm">
+			<img src="assets/images/hero.webp" alt="laughing dog" width="384" height="346.82"/>
+		</div>
+	</section>
+	<section class="w-full max-w-2xl mx-auto hidden md:block">
+		<div class="border-l-[6px] border-t-[6px] border-b-8 border-r-[8px] border-black relative">
+			<span class="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white"></span>
+			<span class="absolute -bottom-2 -left-2 w-2 h-2 bg-white"></span>
+			<span class="absolute -top-2 -right-2 w-4 h-4 bg-white"></span>
+			<span class="absolute -bottom-2 -right-2 w-2 h-2 bg-white"></span>
+			<span class="absolute top-0 left-0 bg-white w-full h-1.5"></span>
+			<span class="absolute bottom-0 right-0 bg-stone-500 w-full h-2"></span>
+			<span class="absolute top-0 right-0 bg-stone-500 w-2 h-full"></span>
+			<span class="absolute top-0 left-0 bg-white w-1.5 h-full"></span>
+			<span class="absolute top-0 left-0 w-1.5 h-1.5 bg-black"></span>
+			<span class="absolute top-0 right-0 w-2 h-2 bg-stone-500"></span>
+			<div class="bg-stone-100 p-20">
+				<div class="relative border-[6px] border-black">
+					<span class="absolute -top-1.5 -left-1.5 w-1.5 h-1.5 bg-stone-100"></span>
+					<span class="absolute -bottom-2 -left-2 w-2 h-2 bg-stone-100"></span>
+					<span class="absolute -top-2 -right-2 w-2 h-2 bg-stone-100"></span>
+					<span class="absolute -bottom-2 -right-2 w-2 h-2 bg-stone-100"></span>
+					<span class="absolute -bottom-2 left-0 w-full h-2 bg-stone-400"></span>
+					<span class="absolute top-0 -left-2 w-1.5 h-full bg-stone-400"></span>
+					<div class="bg-black text-green-primary font-medium p-4 mx-auto aspect-[16/9] overflow-x-auto">
+						<pre><code id="code" class="font-primary"></code></pre>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="max-w-[32rem] mx-auto border-[6px] border-black relative">
+			<div class="p-8 gap-12 flex relative justify-center bg-stone-100">
+				<button
+					id="fetchButton"
+					class="relative flex justify-center shrink-0 px-4 py-2 w-36 font-secondary bg-blue-primary text-sm text-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] before:absolute before:content-[''] before:shadow-[inset_-4px_-4px_#006bb3] before:inset-0 hover:bg-[108de0] active:before:shadow-[inset_4px_4px_#006bb3] disabled:active:before:shadow-[inset_-4px_-4px_#006bb3] disabled:hover:bg-blue-primary"
+				>
+					Get joke
+				</button>
+				<div class="w-1/2 flex flex-col justify-center">
+					<span class="w-full bg-black h-2"></span>
+					<span class="w-full bg-stone-300 h-2"></span>
+				</div>
+				<span class="absolute right-0 top-0 w-1.5 h-full bg-stone-500"></span>
+			</div>
+			<span class="block w-full h-1.5 bg-stone-500"></span>
+			<span class="absolute -left-1.5 w-1.5 h-1.5 bg-white"></span>
+			<span class="absolute -bottom-1.5 -right-1.5 w-1.5 h-1.5 bg-white"></span>
+		</div>
+	</section>
+}
+
+templ endPoints() {
+	<section class="space-y-8">
+		<h2 class="font-secondary font-black leading-tight text-lg md:text-2xl xl:text-4xl">End points</h2>
+		<p class="font-medium md:text-xl">The end points support HTTP and HTTPS.</p>
+		<div class="space-y-4">
+			for _, item := range endPointItems {
+				@components.EndPointItem(item.method, item.path)
+			}
+		</div>
+	</section>
+}
+
+templ guide() {
+	<section>
+		<h2 class="pb-12 font-secondary font-black leading-tight text-lg md:text-2xl xl:text-4xl">Guide</h2>
+		<div class="space-y-20">
+			for _, item := range guideItems {
+				@components.GuideItem(item.title, item.path, item.hasDetails, item.copyDataTarget, item.copyId, item.resultDataTarget, item.resultId, item.result)
+			}
+			<div class="space-y-2">
+				<h4 class="font-bold">Rate Limits</h4>
+				<p>100 requests per day</p>
+			</div>
+		</div>
+	</section>
+}

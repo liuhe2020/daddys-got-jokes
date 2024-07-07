@@ -11,18 +11,14 @@ COPY internal ./internal
 # Download Go modules
 RUN go mod download
 
-# RUN go test -v cmd
-
 # need to use the CGO_ENABLED=0 to disably dynamic linking used by the net library
-RUN CGO_ENABLED=0 GOOS=linux go build -o ./jokes ./cmd
+RUN CGO_ENABLED=0 GOOS=linux go build -o ./jokes ./cmd/api
 
 # # Stage 2: Create a minimal image with the Go binary
 FROM scratch
 
 # # Copy the Go binary from the builder stage
 COPY --from=builder /app/jokes /jokes
-# # copy public folder to the minimal image
-COPY public ./public
 
 # # Expose the application port
 EXPOSE 8080

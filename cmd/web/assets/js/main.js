@@ -9,7 +9,7 @@ const typed = new Typed('#code', {
   typeSpeed: 15,
   onComplete: () => {
     fetchButton.disabled = false;
-    fetchButton.innerHTML = 'Get Joke';
+    fetchButton.innerHTML = 'Get joke';
   },
 });
 
