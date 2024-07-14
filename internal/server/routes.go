@@ -35,14 +35,13 @@ func (s *Server) RegisterRoutes() http.Handler {
 			r.Get("/", s.handleJokes)
 		})
 	})
-
+	// web
 	r.Get("/", templ.Handler(web.HomePage()).ServeHTTP)
+	r.Get("/health", s.healthHandler)
+	r.NotFound(templ.Handler(web.NotFoundPage()).ServeHTTP)
+	// static
 	fileServer := http.FileServer(http.FS(web.Files))
 	r.Handle("/assets/*", fileServer)
-
-	r.Get("/health", s.healthHandler)
-	// static
-	// r.Handle("/*", http.StripPrefix("/", http.FileServer(http.Dir("public"))))
 
 	log.Printf("Daddy's Got Jokes is running on port %d", s.port)
 	return r
