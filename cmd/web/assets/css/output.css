@@ -719,6 +719,14 @@ body::before {
   height: 100%;
 }
 
+.min-h-\[100dvh\] {
+  min-height: 100dvh;
+}
+
+.min-h-full {
+  min-height: 100%;
+}
+
 .w-1 {
   width: 0.25rem;
 }
@@ -775,12 +783,20 @@ body::before {
   flex-shrink: 0;
 }
 
+.grow {
+  flex-grow: 1;
+}
+
 .table-auto {
   table-layout: auto;
 }
 
 .cursor-default {
   cursor: default;
+}
+
+.grid-rows-\[auto_1fr_auto\] {
+  grid-template-rows: auto 1fr auto;
 }
 
 .flex-col {
@@ -821,6 +837,14 @@ body::before {
 
 .gap-6 {
   gap: 1.5rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.gap-10 {
+  gap: 2.5rem;
 }
 
 .space-x-8 > :not([hidden]) ~ :not([hidden]) {
@@ -1041,6 +1065,10 @@ body::before {
   text-align: left;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .font-primary {
   font-family: "JetBrains Mono";
 }
@@ -1075,6 +1103,11 @@ body::before {
 .text-xxs {
   font-size: 0.6rem;
   line-height: 0.9rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .font-black {

@@ -1,7 +1,7 @@
 package web
 
 templ header() {
-	<header class="p-4 justify-between flex-wrap gap-4 max-w-4xl flex md:flex md:p-10 md:mx-auto xl:px-0">
+	<header class="p-4 justify-between flex-wrap gap-4 w-full max-w-4xl flex md:flex md:p-10 md:mx-auto xl:px-0">
 		<h1 class="inline-block font-secondary pb-2 pt-3 h-10 px-4 cursor-default text-xxs bg-white shadow-[0_4px_#000,0_-4px_#000,4px_0_#000,-4px_0_#000] md:text-xs">
 			Daddy's Got Jokes
 		</h1>
@@ -19,7 +19,7 @@ templ header() {
 }
 
 templ footer() {
-	<footer class="pt-20 px-4 pb-4 font-secondary text-[0.675rem] max-w-4xl md:p-10 md:mx-auto xl:px-0" id="footer">
+	<footer class="pt-20 px-4 pb-4 font-secondary text-[0.675rem] w-full max-w-4xl md:p-10 md:mx-auto xl:px-0" id="footer">
 		<p class="">
 			&#169; 
 			<span id="year"></span> Daddy's Got Jokes developed by <a href="https://liuhe.dev/" target="_blank" class="hover:text-blue-primary">liuhe.dev</a>
@@ -45,9 +45,9 @@ templ layout() {
 			<script defer src="assets/js/main.js"></script>
 			<title>Daddy's Got Jokes | Free Jokes REST API</title>
 		</head>
-		<body class="font-primary bg-grid" id="body">
+		<body class="font-primary bg-grid flex flex-col min-h-[100dvh]" id="body">
 			@header()
-			<main class="p-4 mt-12 space-y-32 max-w-4xl md:p-10 md:mx-auto xl:px-0">
+			<main class="p-4 mt-12 space-y-32 max-w-4xl grow md:p-10 md:mx-auto xl:px-0">
 				{ children... }
 			</main>
 			@footer()
